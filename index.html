@@ -1,0 +1,329 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+<meta charset="UTF-8">
+<title>Sistema de Revisão de Conteúdos</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<style>
+:root {
+    --primary: #2563eb;
+    --success: #16a34a;
+    --danger: #dc2626;
+    --bg-gradient: linear-gradient(135deg,#0f2027,#203a43,#2c5364);
+}
+
+body {
+    margin:0;
+    font-family: 'Segoe UI', Arial, sans-serif;
+    background: var(--bg-gradient);
+    background-attachment: fixed;
+    color: #333;
+}
+
+.progress-container {
+    position: fixed;
+    top: 0; left: 0; width: 100%; height: 8px;
+    background: rgba(255,255,255,0.2);
+    z-index: 1000;
+}
+.progress-bar {
+    height: 100%;
+    background: #4ade80;
+    width: 0%;
+    transition: width 0.3s;
+}
+
+.container {
+    max-width: 900px;
+    margin: 40px auto;
+    background: #ffffff;
+    padding: 30px;
+    border-radius: 12px;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+}
+
+.header-info {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background: #f1f5f9;
+    padding: 15px;
+    border-radius: 8px;
+    margin-bottom: 20px;
+    font-weight: bold;
+}
+
+.question {
+    background:#f9fafb;
+    padding:20px;
+    border-radius:10px;
+    margin-bottom:20px;
+    border-left:6px solid #cbd5e1;
+    transition: 0.3s;
+}
+
+.question.answered {
+    opacity: 0.95;
+    pointer-events: none; 
+}
+
+.question.correct { border-left-color: var(--success); background: #f0fdf4; }
+.question.wrong { border-left-color: var(--danger); background: #fef2f2; }
+
+label {
+    display:block;
+    padding:12px;
+    margin:8px 0;
+    border-radius:6px;
+    cursor:pointer;
+    border: 1px solid #e2e8f0;
+    transition: 0.2s;
+    background: white;
+}
+
+label.correct { background:#dcfce7 !important; border-color: #16a34a; font-weight: bold; color: #166534; }
+label.wrong { background:#fee2e2 !important; border-color: #dc2626; font-weight: bold; color: #991b1b; }
+
+.controls {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 10px;
+    margin-bottom: 20px;
+}
+
+button {
+    padding:14px;
+    border:none;
+    border-radius:8px;
+    font-size:15px;
+    cursor:pointer;
+    font-weight: bold;
+    color: white;
+}
+.btn-sortear { background:#2563eb; }
+.btn-trocar { background:#6366f1; }
+.btn-finalizar { background:#16a34a; width: 100%; margin-top: 10px; font-size: 18px; }
+
+.resultado-box {
+    font-size:22px;
+    font-weight:bold;
+    text-align:center;
+    margin-top:20px;
+    padding: 20px;
+    border-radius: 8px;
+    display: none;
+}
+</style>
+</head>
+<body>
+
+<div class="progress-container"><div class="progress-bar" id="barra"></div></div>
+
+<div class="container">
+    <h1 style="text-align:center; margin-top:0; color: #1e293b;">Sistema de Revisão de Conteúdos</h1>
+    
+    <div class="header-info">
+        <div id="materia-txt">Matéria: TECNOLOGIA EMERGENTE E PROTAGONISMO</div>
+        <div id="status-txt">Acertos: 0 / Respondidas: 0</div>
+    </div>
+
+    <div class="controls">
+        <button class="btn-sortear" onclick="sortear()">🔀 Reiniciar / Embaralhar</button>
+        <button class="btn-trocar" onclick="alternarMateria()">📚 Trocar Matéria</button>
+    </div>
+
+    <div id="quiz"></div>
+
+    <button class="btn-finalizar" onclick="finalizar()">Ver Resultado Final</button>
+    <div id="resultado" class="resultado-box"></div>
+</div>
+
+<script>
+const banco = {
+    tecnologia: {
+        nome: "TECNOLOGIA EMERGENTE E PROTAGONISMO",
+        questoes: [
+            {q:"O movimento Ciência Aberta tem como principal objetivo:",a:["Acabar com o monopólio do conhecimento e incentivar a construção coletiva","Privatizar acervos de documentos acadêmicos","Restringir o acesso a dados para pesquisadores seniores","Cobrar assinaturas caras de instituições de ensino"],c:0},
+            {q:"Qual a sequência correta da transformação de dados na Ciência?",a:["Dados em informações e depois em conhecimento","Conhecimento em dados e depois em crenças","Informações em dados e depois em interpretação","Interpretação em crenças e depois em dados"],c:0},
+            {q:"O termo 'pós-verdade' refere-se a um cenário onde:",a:["As mentiras e afetos são mais aceitos que os fatos verídicos","A verdade científica é absoluta e inquestionável","A imprensa é a única fonte de verdade confiável","Não existem mais redes sociais para disseminar dados"],c:0},
+            {q:"O projeto 'Panama Papers' é um exemplo de:",a:["Desafios trazidos pelo enorme volume de dados no Big Data","Um software de código aberto para editores","Uma rede social voltada para advogados panamenhos","Um banco de dados exclusivo para pesquisas biológicas"],c:0},
+            {q:"Dados estruturados são caracterizados por:",a:["Serem organizados em uma estrutura definida, como formulários","Serem textos brutos e postagens em redes sociais","Consistirem apenas em vídeos e áudios de longa duração","Não permitirem a realização de filtros ou parâmetros"],c:0},
+            {q:"O que é 'Data Storytelling'?",a:["Identificar aspectos interessantes em dados para contar boas histórias","A técnica de deletar dados desnecessários","Um tipo de algoritmo de segurança cibernética","O processo de criar mentiras a partir de dados reais"],c:0},
+            {q:"A Ciência de Dados é considerada uma intersecção entre:",a:["Estratégia, estatística e tecnologia","História, artes e religião","Marketing, vendas e logística","Direito, filosofia e política"],c:0},
+            {q:"A 'Mineração de Texto' usa qual tecnologia para transformar texto bruto em dados estruturados?",a:["Processamento de Linguagem Natural (PLN)","Blockchain","Hardware de armazenamento","Apenas cálculos estatísticos manuais"],c:0},
+            {q:"A Plataforma Lattes tem como objetivo:",a:["Padronizar currículos de estudiosos e especialistas","Publicar notícias de entretenimento","Vender cursos de graduação online","Hospedar vídeos de entretenimento científico"],c:0},
+            {q:"A Lei de Acesso à Informação (LAI) de 2011 no Brasil obriga:",a:["A transparência ativa e prestação de contas por órgãos públicos","O sigilo total de todos os dados financeiros do governo","A exclusão de portais de transparência de municípios","Que apenas pesquisadores tenham acesso a dados da União"],c:0},
+            {q:"Qual a função da visualização de dados?",a:["Representar graficamente resultados para facilitar a compreensão","Criptografar dados para que ninguém os veja","Apenas tornar os relatórios mais bonitos visualmente","Substituir a análise estatística por imagens"],c:0},
+            {q:"O conceito de 'Lifelong Learning' defende:",a:["A educação contínua ao longo de toda a vida","Que o aprendizado termina após a graduação","O fim das escolas tradicionais e universidades","Que apenas as tecnologias devem aprender via IA"],c:0},
+            {q:"As 'Soft Skills' são habilidades:",a:["Comportamentais e subjetivas, como empatia e criatividade","Técnicas e mecânicas, como consertar máquinas","Relacionadas apenas ao domínio de linguagens de programação","De hardware e manutenção de redes de computadores"],c:0},
+            {q:"O que são 'Tecnologias Emergentes'?",a:["Inovações em fase de implementação que podem transformar o futuro","Tecnologias antigas que foram abandonadas","Ferramentas que já são utilizadas por 100% da população","Apenas aparelhos de rádio e televisão"],c:0},
+            {q:"O conceito de 'Big Data' refere-se a:",a:["Enorme volume de conteúdos produzidos diariamente","Um tipo de computador de grande porte dos anos 70","O nome de uma rede social específica","Um pequeno conjunto de dados organizados"],c:0},
+            {q:"O movimento Ciência Aberta utiliza qual tipo de plataforma?",a:["Plataformas abertas (código aberto) e gratuitas","Sistemas fechados e proprietários com senhas","Arquivos físicos guardados em bibliotecas privadas","Plataformas que cobram por cada download efetuado"],c:0},
+            {q:"A 'Transparência Ativa' definida pela LAI significa:",a:["Obrigação do poder público divulgar dados sem precisar de pedido","Divulgação de dados apenas quando alguém solicita formalmente","Manter os dados em pastas físicas inacessíveis","Cobrar taxas para mostrar informações financeiras"],c:0},
+            {q:"O 'Machine Learning' é uma ferramenta essencial para:",a:["Inteligência Artificial e Ciência de Dados","Apenas para a edição de imagens básicas","Substituir totalmente a necessidade de cientistas humanos","A limpeza física de servidores de dados"],c:0},
+            {q:"O que a Gartner define como tecnologias para experiências imersivas?",a:["Metaverso e superapps","Apenas o e-mail e o chat de texto","Rádio FM e TV por assinatura","Calculadoras e relógios digitais"],c:0},
+            {q:"O 'Data Mining' (Mineração de Dados) serve para:",a:["Extrair informações úteis e padrões de grandes conjuntos de dados","Cavar buracos para passar cabos de fibra óptica","Criar novos dados do zero sem base real","Deletar informações de bancos de dados antigos"],c:0},
+            {q:"No contexto do RH do futuro, as tecnologias visam:",a:["Liberar funcionários de tarefas repetitivas para focarem no estratégico","Substituir todos os seres humanos por robôs humanoides","Diminuir a necessidade de pensamento crítico","Acabar com a necessidade de treinamento de pessoal"],c:0},
+            {q:"O 'ChatGPT' é baseado em qual tipo de tecnologia?",a:["Inteligência Artificial e Machine Learning","Apenas um banco de dados estático de perguntas e respostas","Processamento de sinais de rádio analógicos","Redes de televisão por satélite"],c:0},
+            {q:"A plataforma 'Scielo' é conhecida por oferecer:",a:["Acesso gratuito a artigos acadêmicos e modelo cooperativo","Venda de livros didáticos por preços altos","Serviços de streaming de filmes científicos","Notícias de jornalismo sensacionalista"],c:0},
+            {q:"Um desafio citado sobre o ChatGPT na ciência é:",a:["A falta de coerência e a fixação em pensamentos do senso comum","O excesso de criatividade e originalidade nos textos","A capacidade de sentir emoções humanas profundas","O fato de ele ser uma ferramenta paga e inacessível"],c:0},
+            {q:"A 'Hemeroteca Digital' da Biblioteca Nacional contém:",a:["Periódicos impressos digitalizados desde o período do Império","Apenas livros didáticos de matemática atualizados","Vídeos de redes sociais sobre história do Brasil","Códigos-fonte de softwares governamentais"],c:0},
+            {q:"O 'Business Intelligence' (BI) utiliza dados para:",a:["Apoiar a tomada de decisões estratégicas","Apenas para enviar spam para clientes","Esconder os resultados financeiros da empresa","Substituir o planejamento estratégico humano"],c:0},
+            {q:"A 'Estratégia Brasileira de Inteligência Artificial (EBIA)' visa:",a:["Qualificar pessoas e estabelecer limites éticos para a IA","Proibir o uso de internet em órgãos federais","Criar uma IA que substitua o governo nacional","Obrigar o uso de robôs em todas as residências"],c:0},
+            {q:"O termo 'Imaginário Tecnológico' representa:",a:["Projeções dos indivíduos sobre como o futuro será com a tecnologia","A capacidade de criar designs coloridos para sites","Um tipo de software de realidade virtual","O medo irracional de qualquer tipo de máquina"],c:0},
+            {q:"Qual destas é uma tecnologia emergente segundo o texto?",a:["Inteligência Artificial Causal","Máquina de escrever","Fax","Disquete"],c:0},
+            {q:"A 'Cultura Organizacional' na era digital deve valorizar:",a:["A ética, inclusão e o respeito à diversidade","Apenas o lucro acima de qualquer princípio","A centralização total de todas as informações","O isolamento de cada departamento da empresa"],c:0},
+            {q:"O que é 'Transformação Digital'?",a:["Incorporação de tecnologias em todos os aspectos da organização","Apenas a troca de computadores velhos por novos","O uso de mídias sociais apenas para diversão pessoal","A digitalização de apenas um documento da empresa"],c:0},
+            {q:"Qual área da ciência usa análise de dados para diagnóstico precoce de câncer?",a:["Medicina","Física pura","Arqueologia","Astronomia"],c:0},
+            {q:"As ferramentas de IA conseguem cruzar dados em um nível:",a:["Impossível para o cérebro humano processar sozinho","Muito inferior à capacidade de uma criança de 5 anos","Que depende apenas de sorte e intuição do robô","Que não gera nenhum insight útil para empresas"],c:0},
+            {q:"O movimento Ciência Aberta combate o:",a:["Monopólio do conhecimento","Uso de internet nas universidades","Compartilhamento de dados entre cientistas","Acesso gratuito a artigos científicos"],c:0},
+            {q:"Fake News são nocivas à Ciência porque:",a:["Traduzem crenças do senso comum em vez de fatos provados","São notícias muito engraçadas que distraem os cientistas","Aumentam a confiança nas instituições legítimas","São escritas apenas em linguagens de programação"],c:0},
+            {q:"O portal de periódicos da CAPES oferece:",a:["Conteúdo científico como livros, normas e vídeos","Apenas resultados de loterias federais","Assinaturas de revistas de fofocas internacionais","Jogos online para treinamento de memória"],c:0},
+            {q:"A 'Análise de Dados' tem como objetivo:",a:["Identificar padrões e tendências para tomadas de decisão","Simplesmente acumular arquivos em pastas digitais","Criar problemas onde não existem soluções","Tornar o processo científico mais lento e burocrático"],c:0},
+            {q:"O 'DataOps' é citado como um exemplo de:",a:["Tecnologia emergente em fase de implementação","Um tipo de operação cirúrgica remota","O nome de um satélite de comunicações brasileiro","Uma rede social voltada para esportistas"],c:0},
+            {q:"Pierre Lévy afirma que as tecnologias trazem mudanças para:",a:["A vida social, cultural e formas de pensar","Apenas a voltagem da rede elétrica mundial","O clima do planeta de forma imediata e física","A fisiologia básica do corpo humano"],c:0},
+            {q:"O 'Google Data Science' é um exemplo de:",a:["Pacote de ferramentas para análise e machine learning","Um tipo de navegador de internet para crianças","Um hardware de armazenamento de dados em nuvem","Um curso presencial dado pelo Google no Brasil"],c:0},
+            {q:"A 'Educação Permanente' (Longlife Learning) é necessária porque:",a:["O mundo se transforma vertiginosamente e exige atualização","As pessoas esquecem tudo o que aprendem rapidamente","As empresas não querem mais contratar jovens","O governo obriga todos a estudarem 24 horas por dia"],c:0},
+            {q:"A 'Transparência Passiva' ocorre quando:",a:["O cidadão solicita uma informação e o órgão responde","O órgão publica tudo automaticamente no site","Não existe nenhuma resposta do poder público","A informação é vendida para o cidadão"],c:0},
+            {q:"A mineração de dados na área de 'Supply Chain' ajuda a:",a:["Melhorar a eficiência da cadeia de suprimentos e estoques","Identificar padrões de doenças em pacientes","Detectar fraudes em cartões de crédito","Segmentar clientes para campanhas de marketing"],c:0},
+            {q:"A 'Visualização de Dados' permite uma representação:",a:["Gráfica e intuitiva dos resultados obtidos","Complexa e difícil para que apenas especialistas entendam","Apenas em forma de texto corrido sem imagens","Baseada apenas em opiniões pessoais do designer"],c:0},
+            {q:"O 'Microsoft Azure Machine Learning Studio' permite:",a:["Criar modelos de IA sem conhecimento avançado em programação","Apenas jogar jogos em alta definição via nuvem","Substituir o Windows como sistema operacional principal","Editar vídeos para redes sociais de forma automática"],c:0}
+        ]
+    },
+    fge: {
+        nome: "Fundamentos de Gestão Empresarial",
+        questoes: [
+            {q:"Administração é o processo de:",a:["Planejar, organizar, dirigir e controlar recursos","Apenas executar tarefas","Somente controlar pessoas","Reduzir custos"],c:0},
+            {q:"As organizações podem ser definidas como:",a:["Agrupamentos de pessoas que buscam objetivos comuns","Apenas empresas lucrativas","Somente órgãos públicos","Grupos sem finalidade"],c:0},
+            {q:"Planejamento tem como foco principal:",a:["Definir objetivos e estratégias","Executar atividades","Controlar resultados","Motivar pessoas"],c:0},
+            {q:"Eficiência refere-se:",a:["Ao uso adequado dos recursos","Ao alcance dos objetivos","À inovação","À criatividade"],c:0},
+            {q:"Eficácia significa:",a:["Alcançar os objetivos","Reduzir custos","Controlar processos","Evitar desperdícios"],c:0},
+            {q:"Efetividade ocorre quando:",a:["Eficiência e eficácia são alcançadas juntas","Há apenas controle","Os custos são reduzidos","Há aumento de produção"],c:0},
+            {q:"A função organização envolve:",a:["Estruturar recursos e atividades","Controlar resultados","Motivar equipes","Criar estratégias"],c:0},
+            {q:"A função direção está ligada a:",a:["Liderança e motivação","Controle financeiro","Planejamento estratégico","Organização estrutural"],c:0},
+            {q:"Controle consiste em:",a:["Comparar resultados com metas","Criar estratégias","Motivar pessoas","Executar tarefas"],c:0},
+            {q:"Stakeholders são:",a:["Grupos ou indivíduos afetados pela organização","Apenas acionistas","Somente clientes","Somente funcionários"],c:0},
+            {q:"O nível estratégico é responsável por:",a:["Definir objetivos e estratégias","Executar tarefas","Controlar rotinas","Supervisionar produção"],c:0},
+            {q:"O nível tático atua principalmente:",a:["Na coordenação das áreas","Na execução operacional","No planejamento estratégico","Na auditoria"],c:0},
+            {q:"O nível operacional realiza:",a:["As atividades do dia a dia","O planejamento","A tomada de decisões estratégicas","O controle financeiro"],c:0},
+            {q:"Marketing tem como objetivo:",a:["Atender às necessidades do mercado","Controlar custos","Produzir bens","Gerenciar pessoas"],c:0},
+            {q:"A área financeira busca:",a:["Sustentabilidade econômica","Produção eficiente","Satisfação dos clientes","Gestão de pessoas"],c:0},
+            {q:"Recursos Humanos atua principalmente:",a:["Na gestão de pessoas","Na produção","No marketing","No controle financeiro"],c:0},
+            {q:"Estrutura organizacional define:",a:["Autoridade e responsabilidades","Salários","Lucros","Tecnologia"],c:0},
+            {q:"Organograma é:",a:["Representação gráfica da estrutura","Planejamento estratégico","Relatório financeiro","Ferramenta de marketing"],c:0},
+            {q:"Departamentalização funcional baseia-se:",a:["Nas funções organizacionais","Nos clientes","Nos produtos","Na região"],c:0},
+            {q:"Cultura organizacional envolve:",a:["Valores e crenças compartilhadas","Apenas normas formais","Somente tecnologia","Apenas metas financeiras"],c:0},
+            {q:"Liderança eficaz está relacionada a:",a:["Influenciar pessoas","Centralizar poder","Controlar rigidamente","Aplicar punições"],c:0},
+            {q:"Processos organizacionais são:",a:["Conjunto de atividades interligadas","Apenas tarefas isoladas","Normas legais","Relatórios financeiros"],c:0},
+            {q:"Ambiente externo inclui:",a:["Fatores econômicos, políticos e sociais","Apenas funcionários","Somente máquinas","Apenas clientes"],c:0},
+            {q:"Ambiente interno envolve:",a:["Pessoas, recursos e estrutura","Concorrência","Economia","Legislação"],c:0},
+            {q:"Missão organizacional define:",a:["A razão de existir da organização","Metas financeiras","Estrutura hierárquica","Salários"],c:0},
+            {q:"Visão organizacional representa:",a:["Onde a empresa quer chegar","Resultados atuais","Estrutura interna","Processos operacionais"],c:0},
+            {q:"Valores organizacionais orientam:",a:["Comportamentos e decisões","Lucros","Tecnologia","Estratégias financeiras"],c:0},
+            {q:"Tomada de decisão envolve:",a:["Escolher entre alternativas","Apenas intuição","Apenas experiência","Somente normas"],c:0},
+            {q:"Planejamento estratégico foca no:",a:["Longo prazo","Curto prazo","Dia a dia","Controle operacional"],c:0},
+            {q:"Planejamento operacional refere-se a:",a:["Atividades rotineiras","Estratégias globais","Missão","Visão"],c:0},
+            {q:"Inovação organizacional busca:",a:["Melhoria contínua","Manter padrões antigos","Evitar mudanças","Reduzir pessoas"],c:0},
+            {q:"Competitividade depende de:",a:["Estratégia e adaptação","Isolamento","Controle rígido","Produção artesanal"],c:0},
+            {q:"Descentralização ocorre quando:",a:["Decisões são distribuídas","Tudo é decidido no topo","Não há hierarquia","Não há controle"],c:0},
+            {q:"Centralização caracteriza-se por:",a:["Decisões concentradas na alta gestão","Autonomia total","Falta de controle","Ausência de hierarquia"],c:0},
+            {q:"Comunicação organizacional eficaz:",a:["Facilita o alcance de objetivos","Gera conflitos","Reduz produtividade","Isola setores"],c:0},
+            {q:"Ética empresarial orienta:",a:["Condutas responsáveis","Apenas lucros","Apenas resultados","Apenas estratégias"],c:0},
+            {q:"Responsabilidade social envolve:",a:["Compromisso com a sociedade","Somente lucro","Apenas marketing","Redução de custos"],c:0},
+            {q:"Gestão contemporânea valoriza:",a:["Flexibilidade e adaptação","Rigidez estrutural","Centralização extrema","Rotinas fixas"],c:0},
+            {q:"Eficiência operacional significa:",a:["Produzir mais com menos recursos","Aumentar custos","Reduzir qualidade","Evitar controle"],c:0},
+            {q:"Eficácia estratégica significa:",a:["Alcançar metas estabelecidas","Reduzir produção","Eliminar planejamento","Ignorar concorrência"],c:0},
+            {q:"Análise SWOT avalia:",a:["Forças, fraquezas, oportunidades e ameaças","Somente forças","Apenas oportunidades","Somente ameaças"],c:0},
+            {q:"Clima organizacional influencia:",a:["Satisfação e desempenho","Apenas lucros","Tecnologia","Estrutura física"],c:0},
+            {q:"Capital intelectual representa:",a:["Conhecimento organizacional","Somente dinheiro","Equipamentos","Instalações"],c:0},
+            {q:"Planejamento tático desdobra:",a:["Estratégias em ações específicas","Missão organizacional","Valores","Lucros"],c:0},
+            {q:"Planejamento estratégico considera:",a:["Ambiente interno e externo","Somente ambiente interno","Apenas concorrência","Somente finanças"],c:0}
+        ]
+    }
+};
+
+let materiaAtiva = "tecnologia";
+let perguntas = [];
+let respostas = [];
+
+function preparar() {
+    let base = JSON.parse(JSON.stringify(banco[materiaAtiva].questoes));
+    perguntas = base.map(p => ({v: p, s: Math.random()})).sort((a,b)=>a.s-b.s).map(o=>o.v);
+    perguntas = perguntas.map(p => {
+        let alts = p.a.map((texto, idx) => ({texto, c: idx === p.c, s: Math.random()})).sort((a,b)=>a.s-b.s);
+        return { q: p.q, a: alts.map(a=>a.texto), c: alts.findIndex(a=>a.c) };
+    });
+    respostas = new Array(perguntas.length).fill(null);
+}
+
+function stats() {
+    let resp = respostas.filter(r => r !== null).length;
+    let acertos = 0;
+    respostas.forEach((r, i) => { if(r === perguntas[i].c) acertos++; });
+    document.getElementById("status-txt").innerText = `Acertos: ${acertos} / Respondidas: ${resp} de ${perguntas.length}`;
+    document.getElementById("barra").style.width = ((resp/perguntas.length)*100) + "%";
+}
+
+function responder(perguntaIndex, alternativaIndex) {
+    if(respostas[perguntaIndex] !== null) return; 
+    respostas[perguntaIndex] = alternativaIndex;
+    stats();
+    render(); 
+}
+
+function render() {
+    const quiz = document.getElementById("quiz");
+    quiz.innerHTML = "";
+    
+    perguntas.forEach((p, i) => {
+        const jaRespondeu = respostas[i] !== null;
+        const div = document.createElement("div");
+        div.className = "question" + (jaRespondeu ? " answered" : "");
+        div.innerHTML = `<p><strong>${i+1}. ${p.q}</strong></p>`;
+        
+        p.a.forEach((alt, j) => {
+            const label = document.createElement("label");
+            if(jaRespondeu) {
+                if(j === p.c) label.classList.add("correct");
+                if(respostas[i] === j && j !== p.c) label.classList.add("wrong");
+                if(respostas[i] === j) div.classList.add(j === p.c ? "correct" : "wrong");
+            }
+            label.onclick = () => responder(i, j);
+            label.innerHTML = `<span>${alt}</span>`;
+            div.appendChild(label);
+        });
+        quiz.appendChild(div);
+    });
+}
+
+function sortear() { 
+    preparar(); 
+    document.getElementById("resultado").style.display = "none"; 
+    stats(); 
+    render(); 
+    window.scrollTo(0,0); 
+}
+
+function alternarMateria() { 
+    materiaAtiva = (materiaAtiva === "tecnologia") ? "fge" : "tecnologia"; 
+    document.getElementById("materia-txt").innerText = "Matéria: " + banco[materiaAtiva].nome; 
+    sortear(); 
+}
+
+function finalizar() {
+    let acertos = 0;
+    let total = perguntas.length;
+    respostas.forEach((r, i) => { if(r === perguntas[i].c) acertos++; });
+    const resDiv = document.getElementById("resultado");
+    resDiv.style.display = "block";
+    resDiv.innerHTML = `Simulado Concluído!<br>Pontuação: ${acertos} de ${total} (${((acertos/total)*100).toFixed(1)}%)`;
+    resDiv.style.background = (acertos/total >= 0.7) ? "#dcfce7" : "#fee2e2";
+    window.scrollTo({ top: document.body.scrollHeight, behavior: 'smooth' });
+}
+
+preparar();
+render();
+</script>
+</body>
+</html>
