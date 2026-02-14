@@ -2,7 +2,7 @@
 <html lang="pt-br">
 <head>
 <meta charset="UTF-8">
-<title>Sistema de Revisão de Conteúdos</title>
+<title>Sistema de Revisão - Nível Desafio Acadêmico</title>
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
 <style>
@@ -87,12 +87,12 @@ label.wrong { background:#fee2e2 !important; border-color: #dc2626; font-weight:
 
 .explanation {
     margin-top: 10px;
-    padding: 10px;
+    padding: 12px;
     background: #e0f2fe;
     border-radius: 5px;
     font-size: 0.9em;
     color: #0369a1;
-    border: 1px solid #bae6fd;
+    border-left: 4px solid #0ea5e9;
 }
 
 .controls {
@@ -131,7 +131,7 @@ button {
 <div class="progress-container"><div class="progress-bar" id="barra"></div></div>
 
 <div class="container">
-    <h1 style="text-align:center; margin-top:0; color: #1e293b;">Sistema de Revisão de Conteúdos</h1>
+    <h1 style="text-align:center; margin-top:0; color: #1e293b;">Revisão de Conteúdo - Nível Superior</h1>
     
     <div class="header-info">
         <div id="materia-txt">Matéria: TECNOLOGIA EMERGENTE E PROTAGONISMO</div>
@@ -154,101 +154,56 @@ const banco = {
     tecnologia: {
         nome: "TECNOLOGIA EMERGENTE E PROTAGONISMO",
         questoes: [
-            {q:"O movimento Ciência Aberta tem como principal objetivo:",a:["Acabar com o monopólio do conhecimento e incentivar a construção coletiva","Privatizar acervos de documentos acadêmicos","Restringir o acesso a dados para pesquisadores seniores","Cobrar assinaturas caras de instituições de ensino"],c:0,e:"A Ciência Aberta visa democratizar o saber, permitindo que qualquer pessoa acesse dados científicos livremente."},
-            {q:"Qual a sequência correta da transformação de dados na Ciência?",a:["Dados em informações e depois em conhecimento","Conhecimento em dados e depois em crenças","Informações em dados e depois em interpretação","Interpretação em crenças e depois em dados"],c:0,e:"Dados são a base bruta; organizados viram informação; aplicados viram conhecimento."},
-            {q:"O termo 'pós-verdade' refere-se a um cenário onde:",a:["As mentiras e afetos são mais aceitos que os fatos verídicos","A verdade científica é absoluta e inquestionável","A imprensa é a única fonte de verdade confiável","Não existem mais redes sociais para disseminar dados"],c:0,e:"Na pós-verdade, o apelo emocional e as crenças pessoais têm mais influência que fatos objetivos."},
-            {q:"O projeto 'Panama Papers' é um exemplo de:",a:["Desafios trazidos pelo enorme volume de dados no Big Data","Um software de código aberto para editores","Uma rede social voltada para advogados panamenhos","Um banco de dados exclusivo para pesquisas biológicas"],c:0,e:"Foi um marco no jornalismo de dados, processando milhões de arquivos para revelar evasão fiscal."},
-            {q:"Dados estruturados são caracterizados por:",a:["Serem organizados em uma estrutura definida, como formulários","Serem textos brutos e postagens em redes sociais","Consistirem apenas em vídeos e áudios de longa duração","Não permitirem a realização de filtros ou parâmetros"],c:0,e:"Eles seguem um padrão fixo (como tabelas SQL), facilitando a busca e organização."},
-            {q:"O que é 'Data Storytelling'?",a:["Identificar aspectos interessantes em dados para contar boas histórias","A técnica de deletar dados desnecessários","Um tipo de algoritmo de segurança cibernética","O processo de criar mentiras a partir de dados reais"],c:0,e:"É a arte de comunicar insights de dados através de narrativas visuais e contextuais."},
-            {q:"A Ciência de Dados é considerada uma intersecção entre:",a:["Estratégia, estatística e tecnologia","História, artes e religião","Marketing, vendas e logística","Direito, filosofia e política"],c:0,e:"Combina o conhecimento do negócio (estratégia), matemática (estatística) e ferramentas de TI."},
-            {q:"A 'Mineração de Texto' usa qual tecnologia para transformar texto bruto em dados estruturados?",a:["Processamento de Linguagem Natural (PLN)","Blockchain","Hardware de armazenamento","Apenas cálculos estatísticos manuais"],c:0,e:"O PLN permite que máquinas 'entendam' e extraiam sentido de textos humanos não estruturados."},
-            {q:"A Plataforma Lattes tem como objetivo:",a:["Padronizar currículos de estudiosos e especialistas","Publicar notícias de entretenimento","Vender cursos de graduação online","Hospedar vídeos de entretenimento científico"],c:0,e:"É o sistema padrão do Brasil para registrar a vida acadêmica de pesquisadores."},
-            {q:"A Lei de Acesso à Informação (LAI) de 2011 no Brasil obriga:",a:["A transparência ativa e prestação de contas por órgãos públicos","O sigilo total de todos os dados financeiros do governo","A exclusão de portais de transparência de municípios","Que apenas pesquisadores tenham acesso a dados da União"],c:0,e:"A LAI estabelece que a informação pública é a regra e o sigilo é a exceção."},
-            {q:"Qual a função da visualização de dados?",a:["Representar graficamente resultados para facilitar a compreensão","Criptografar dados para que ninguém os veja","Apenas tornar os relatórios mais bonitos visualmente","Substituir a análise estatística por imagens"],c:0,e:"Gráficos e mapas ajudam a identificar padrões que seriam difíceis de ver em tabelas puras."},
-            {q:"O conceito de 'Lifelong Learning' defende:",a:["A educação contínua ao longo de toda a vida","Que o aprendizado termina após a graduação","O fim das escolas tradicionais e universidades","Que apenas as tecnologias devem aprender via IA"],c:0,e:"Significa que o aprendizado nunca para, sendo essencial em um mundo de mudanças rápidas."},
-            {q:"As 'Soft Skills' são habilidades:",a:["Comportamentais e subjetivas, como empatia e criatividade","Técnicas e mecânicas, como consertar máquinas","Relacionadas apenas ao domínio de linguagens de programação","De hardware e manutenção de redes de computadores"],c:0,e:"Diferente das Hard Skills (técnicas), as Soft Skills focam no comportamento interpessoal."},
-            {q:"O que são 'Tecnologias Emergentes'?",a:["Inovações em fase de implementação que podem transformar o futuro","Tecnologias antigas que foram abandonadas","Ferramentas que já são utilizadas por 100% da população","Apenas aparelhos de rádio e televisão"],c:0,e:"São tecnologias novas com alto potencial de disrupção, como IA e Computação Quântica."},
-            {q:"O conceito de 'Big Data' refere-se a:",a:["Enorme volume de conteúdos produzidos diariamente","Um tipo de computador de grande porte dos anos 70","O nome de uma rede social específica","Um pequeno conjunto de dados organizados"],c:0,e:"Refere-se a dados tão grandes e complexos que exigem softwares especiais para processamento."},
-            {q:"O movimento Ciência Aberta utiliza qual tipo de plataforma?",a:["Plataformas abertas (código aberto) e gratuitas","Sistemas fechados e proprietários com senhas","Arquivos físicos guardados em bibliotecas privadas","Plataformas que cobram por cada download efetuado"],c:0,e:"Prioriza o Open Source para garantir que a ciência não tenha barreiras financeiras."},
-            {q:"A 'Transparência Ativa' definida pela LAI significa:",a:["Obrigação do poder público divulgar dados sem precisar de pedido","Divulgação de dados apenas quando alguém solicita formalmente","Manter os dados em pastas físicas inacessíveis","Cobrar taxas para mostrar informações financeiras"],c:0,e:"Ativa é quando o órgão posta espontaneamente no site; Passiva é quando o cidadão pede."},
-            {q:"O 'Machine Learning' é uma ferramenta essencial para:",a:["Inteligência Artificial e Ciência de Dados","Apenas para a edição de imagens básicas","Substituir totalmente a necessidade de cientistas humanos","A limpeza física de servidores de dados"],c:0,e:"É o subcampo da IA que ensina máquinas a aprender com padrões de dados."},
-            {q:"O que a Gartner define como tecnologias para experiências imersivas?",a:["Metaverso e superapps","Apenas o e-mail e o chat de texto","Rádio FM e TV por assinatura","Calculadoras e relógios digitais"],c:0,e:"Tecnologias que misturam o mundo físico e digital para criar imersão total."},
-            {q:"O 'Data Mining' (Mineração de Dados) serve para:",a:["Extrair informações úteis e padrões de grandes conjuntos de dados","Cavar buracos para passar cabos de fibra óptica","Criar novos dados do zero sem base real","Deletar informações de bancos de dados antigos"],c:0,e:"Busca descobrir relações 'escondidas' em grandes volumes de dados."},
-            {q:"No contexto do RH do futuro, as tecnologias visam:",a:["Liberar funcionários de tarefas repetitivas para focarem no estratégico","Substituir todos os seres humanos por robôs humanoides","Diminuir a necessidade de pensamento crítico","Acabar com a necessidade de treinamento de pessoal"],c:0,e:"A tecnologia automatiza o braçal para que o RH foque em cultura e estratégia."},
-            {q:"O 'ChatGPT' é baseado em qual tipo de tecnologia?",a:["Inteligência Artificial e Machine Learning","Apenas um banco de dados estático de perguntas e respostas","Processamento de sinais de rádio analógicos","Redes de televisão por satélite"],c:0,e:"Ele utiliza modelos de linguagem de grande escala (LLMs) treinados por IA."},
-            {q:"A plataforma 'Scielo' é conhecida por oferecer:",a:["Acesso gratuito a artigos acadêmicos e modelo cooperativo","Venda de livros didáticos por preços altos","Serviços de streaming de filmes científicos","Notícias de jornalismo sensacionalista"],c:0,e:"É uma biblioteca digital brasileira que disponibiliza periódicos científicos de livre acesso."},
-            {q:"Um desafio citado sobre o ChatGPT na ciência é:",a:["A falta de coerência e a fixação em pensamentos do senso comum","O excesso de criatividade e originalidade nos textos","A capacidade de sentir emoções humanas profundas","O fato de ele ser uma ferramenta paga e inacessível"],c:0,e:"A IA pode gerar as chamadas 'alucinações', apresentando fatos falsos como verdades."},
-            {q:"A 'Hemeroteca Digital' da Biblioteca Nacional contém:",a:["Periódicos impressos digitalizados desde o período do Império","Apenas livros didáticos de matemática atualizados","Vídeos de redes sociais sobre história do Brasil","Códigos-fonte de softwares governamentais"],c:0,e:"Permite consultar jornais e revistas históricos de todo o Brasil via internet."},
-            {q:"O 'Business Intelligence' (BI) utiliza dados para:",a:["Apoiar a tomada de decisões estratégicas","Apenas para enviar spam para clientes","Esconder os resultados financeiros da empresa","Substituir o planejamento estratégico humano"],c:0,e:"Transforma dados históricos em dashboards que ajudam gestores a decidir caminhos."},
-            {q:"A 'Estratégia Brasileira de Inteligência Artificial (EBIA)' visa:",a:["Qualificar pessoas e estabelecer limites éticos para a IA","Proibir o uso de internet em órgãos federais","Criar uma IA que substitua o governo nacional","Obrigar o uso de robôs em todas as residências"],c:0,e:"É o plano do governo para incentivar o uso ético e produtivo da IA no país."},
-            {q:"O termo 'Imaginário Tecnológico' representa:",a:["Projeções dos indivíduos sobre como o futuro será com a tecnologia","A capacidade de criar designs coloridos para sites","Um tipo de software de realidade virtual","O medo irracional de qualquer tipo de máquina"],c:0,e:"Reflete como a sociedade idealiza e interpreta o impacto das máquinas no cotidiano."},
-            {q:"Qual destas é uma tecnologia emergente segundo o texto?",a:["Inteligência Artificial Causal","Máquina de escrever","Fax","Disquete"],c:0,e:"A IA Causal busca entender causas e efeitos, não apenas correlações estatísticas."},
-            {q:"A 'Cultura Organizacional' na era digital deve valorizar:",a:["A ética, inclusão e o respeito à diversidade","Apenas o lucro acima de qualquer princípio","A centralização total de todas as informações","O isolamento de cada departamento da empresa"],c:0,e:"Empresas modernas focam em ambientes colaborativos, transparentes e diversos."},
-            {q:"O que é 'Transformação Digital'?",a:["Incorporação de tecnologias em todos os aspectos da organização","Apenas a troca de computadores velhos por novos","O uso de mídias sociais apenas para diversão pessoal","A digitalização de apenas um documento da empresa"],c:0,e:"É uma mudança cultural e estrutural onde a tecnologia se torna o centro da estratégia."},
-            {q:"Qual área da ciência usa análise de dados para diagnóstico precoce de câncer?",a:["Medicina","Física pura","Arqueologia","Astronomia"],c:0,e:"A bioinformática e a ciência de dados salvam vidas ao identificar padrões em exames."},
-            {q:"As ferramentas de IA conseguem cruzar dados em um nível:",a:["Impossível para o cérebro humano processar sozinho","Muito inferior à capacidade de uma criança de 5 anos","Que depende apenas de sorte e intuição do robô","Que não gera nenhum insight útil para empresas"],c:0,e:"IAs analisam milhões de variáveis simultaneamente, algo fisicamente impossível para humanos."},
-            {q:"O movimento Ciência Aberta combate o:",a:["Monopólio do conhecimento","Uso de internet nas universidades","Compartilhamento de dados entre cientistas","Acesso gratuito a artigos científicos"],c:0,e:"O objetivo é que grandes editoras não cobrem fortunas para que cientistas leiam ciência."},
-            {q:"Fake News são nocivas à Ciência porque:",a:["Traduzem crenças do senso comum em vez de fatos provados","São notícias muito engraçadas que distraem os cientistas","Aumentam a confiança nas instituições legítimas","São escritas apenas em linguagens de programação"],c:0,e:"Desinformação gera desconfiança em vacinas, tratamentos e evidências climáticas."},
-            {q:"O portal de periódicos da CAPES oferece:",a:["Conteúdo científico como livros, normas e vídeos","Apenas resultados de loterias federais","Assinaturas de revistas de fofocas internacionais","Jogos online para treinamento de memória"],c:0,e:"É a principal fonte de material acadêmico internacional para estudantes brasileiros."},
-            {q:"A 'Análise de Dados' tem como objetivo:",a:["Identificar padrões e tendências para tomadas de decisão","Simplesmente acumular arquivos em pastas digitais","Criar problemas onde não existem soluções","Tornar o processo científico mais lento e burocrático"],c:0,e:"Analisar serve para dar sentido ao caos de dados e apontar o melhor caminho."},
-            {q:"O 'DataOps' é citado como um exemplo de:",a:["Tecnologia emergente em fase de implementação","Um tipo de operação cirúrgica remota","O nome de um satélite de comunicações brasileiro","Uma rede social voltada para esportistas"],c:0,e:"É uma metodologia para agilizar e melhorar a qualidade da entrega de dados analíticos."},
-            {q:"Pierre Lévy afirma que as tecnologias trazem mudanças para:",a:["A vida social, cultural e formas de pensar","Apenas a voltagem da rede elétrica mundial","O clima do planeta de forma imediata e física","A fisiologia básica do corpo humano"],c:0,e:"As tecnologias moldam nossa percepção do mundo e as interações humanas (Cibercultura)."},
-            {q:"O 'Google Data Science' é um exemplo de:",a:["Pacote de ferramentas para análise e machine learning","Um tipo de navegador de internet para crianças","Um hardware de armazenamento de dados em nuvem","Um curso presencial dado pelo Google no Brasil"],c:0,e:"Refere-se ao ecossistema de soluções de dados de alto nível da Google."},
-            {q:"A 'Educação Permanente' (Longlife Learning) é necessária porque:",a:["O mundo se transforma vertiginosamente e exige atualização","As pessoas esquecem tudo o que aprendem rapidamente","As empresas não querem mais contratar jovens","O governo obriga todos a estudarem 24 horas por dia"],c:0,e:"Num mundo digital, o que aprendemos hoje pode estar obsoleto em poucos anos."},
-            {q:"A 'Transparência Passiva' ocorre quando:",a:["O cidadão solicita uma informação e o órgão responde","O órgão publica tudo automaticamente no site","Não existe nenhuma resposta do poder público","A informação é vendida para o cidadão"],c:0,e:"O cidadão deve tomar a iniciativa de perguntar através do e-SIC."},
-            {q:"A mineração de dados na área de 'Supply Chain' ajuda a:",a:["Melhorar a eficiência da cadeia de suprimentos e estoques","Identificar padrões de doenças em pacientes","Detectar fraudes em cartões de crédito","Segmentar clientes para campanhas de marketing"],c:0,e:"Ajuda a prever falta de produtos ou gargalos logísticos em fábricas."},
-            {q:"A 'Visualização de Dados' permite uma representação:",a:["Gráfica e intuitiva dos resultados obtidos","Complexa e difícil para que apenas especialistas entendam","Apenas em forma de texto corrido sem imagens","Baseada apenas em opiniões pessoais do designer"],c:0,e:"O cérebro humano processa imagens muito mais rápido que longos textos."},
-            {q:"O 'Microsoft Azure Machine Learning Studio' permite:",a:["Criar modelos de IA sem conhecimento avançado em programação","Apenas jogar jogos em alta definição via nuvem","Substituir o Windows como sistema operacional principal","Editar vídeos para redes sociais de forma automática"],c:0,e:"Oferece uma interface visual de 'arrastar e soltar' para construir inteligência artificial."}
+            {q:"Segundo o material, qual a principal crítica ética ao uso de LLMs (como o ChatGPT) na produção científica?",a:["A possibilidade de gerar 'alucinações' e a questão da autoria/plágio","O alto custo de processamento de dados em nuvem","A falta de interface gráfica para visualização de dados","A incapacidade de processar textos em língua portuguesa"],c:0,e:"A integridade científica exige precisão e autoria clara, o que entra em conflito com as alucinações da IA e a falta de responsabilidade jurídica do software."},
+            {q:"O que define a 'Transparência Passiva' no contexto da Lei de Acesso à Informação?",a:["A disponibilização de dados mediante solicitação específica do cidadão","A publicação automática de salários em portais da transparência","A proibição de acesso a documentos históricos do Império","O uso de criptografia em dados de benefícios sociais"],c:0,e:"Diferente da ativa (onde o dado já está lá), na passiva o Estado responde a um pedido protocolado pelo cidadão."},
+            {q:"Qual a função do 'DataOps' dentro do ciclo de vida dos dados nas organizações?",a:["Agilizar a entrega e melhorar a qualidade da análise de dados de forma contínua","Substituir os analistas humanos por sistemas autônomos de limpeza","Armazenar dados exclusivamente em discos rígidos locais","Criptografar dados para evitar o acesso da diretoria"],c:0,e:"O DataOps foca na eficiência do fluxo de dados, garantindo que a informação chegue correta e rápida para a tomada de decisão."},
+            {q:"Como o conceito de 'Imaginário Tecnológico' afeta a percepção social da IA?",a:["Cria projeções e expectativas (positivas ou negativas) sobre o futuro com máquinas","Define os parâmetros matemáticos exatos de um algoritmo","Impede que empresas invistam em hardware novo","Elimina a necessidade de marketing para novos gadgets"],c:0,e:"O imaginário é a construção cultural do que acreditamos que a tecnologia fará por nós."},
+            {q:"Na Ciência de Dados, o 'Processamento de Linguagem Natural' (PLN) é essencial para:",a:["Transformar textos não estruturados em dados interpretáveis","Aumentar a velocidade de download de bancos de dados SQL","Consertar componentes físicos de servidores de rede","Gerenciar a folha de pagamento de empresas de TI"],c:0,e:"O PLN permite que a máquina extraia insights de fontes como e-mails, posts e documentos jurídicos."},
+            {q:"O movimento 'Ciência Aberta' argumenta que o monopólio do conhecimento:",a:["Deve ser combatido para incentivar a construção coletiva da ciência","É necessário para garantir o lucro das editoras acadêmicas","Não existe mais desde a invenção da prensa de Gutenberg","Garante que apenas os melhores pesquisadores acessem os dados"],c:0,e:"A Ciência Aberta prega que o conhecimento financiado publicamente deve ser acessível a todos gratuitamente."},
+            {q:"A 'IA Causal' se diferencia da IA tradicional por:",a:["Tentativa de entender a relação de causa e efeito, não apenas padrões estatísticos","Ser capaz de rodar em computadores sem conexão com a internet","Não utilizar bancos de dados para o seu treinamento","Focar exclusivamente na geração de imagens e artes digitais"],c:0,e:"Enquanto a IA tradicional vê que 'A' e 'B' acontecem juntos, a causal tenta entender se 'A' causa 'B'."},
+            {q:"O termo 'Pós-Verdade' implica que, na comunicação digital:",a:["Crenças e emoções pesam mais que fatos objetivos na opinião pública","A verdade científica tornou-se absoluta e inquestionável","Não existem mais mentiras circulando nas redes sociais","Os algoritmos excluem automaticamente notícias falsas"],c:0,e:"Na era da pós-verdade, o fato é secundário em relação ao que o indivíduo 'sente' ser verdade."},
+            {q:"Qual a relação entre o projeto 'Panama Papers' e o Big Data?",a:["O uso de algoritmos para processar milhões de documentos em busca de padrões de evasão","A criação de uma nova criptomoeda para transações no Panamá","A proibição do uso de planilhas por jornalistas investigativos","O armazenamento de arquivos físicos em cofres digitais"],c:0,e:"O volume era tão grande que apenas ferramentas de análise de dados em massa puderam revelar o esquema global."},
+            {q:"No 'Data Storytelling', por que o contexto é mais importante que o gráfico isolado?",a:["Porque o contexto atribui significado e direciona a interpretação do dado","Porque gráficos sem contexto ocupam menos espaço na memória","Porque o contexto esconde os erros estatísticos da amostra","Porque o contexto impede que pessoas leigas entendam os dados"],c:0,e:"Um gráfico solto é apenas uma imagem; com contexto, ele vira uma ferramenta de persuasão e decisão."},
+            {q:"As 'Soft Skills' são fundamentais no protagonismo digital porque:",a:["Permitem a colaboração e a ética no uso das ferramentas técnicas","Substituem a necessidade de aprender linguagens de programação","Focam exclusivamente no reparo de hardware e fiação de rede","Garantem que o profissional nunca precise mudar de cargo"],c:0,e:"Em um mundo automatizado, as habilidades humanas de liderança, ética e empatia tornam-se o diferencial."},
+            {q:"O 'Lifelong Learning' é uma resposta direta a qual característica da era digital?",a:["A obsolescência rápida dos conhecimentos e tecnologias","O aumento do tempo de lazer dos trabalhadores","A estabilidade vitalícia dos cargos em empresas de tecnologia","O fim da necessidade de frequentar universidades"],c:0,e:"Como a tecnologia muda todo dia, o profissional precisa estar em constante estado de aprendizado."},
+            {q:"Segundo o material, a 'Bioinformática' exemplifica a Ciência de Dados na:",a:["Análise de grandes sequências genéticas para diagnósticos","Criação de redes sociais para biólogos e botânicos","Fabricação de hardware feito de material orgânico","Manutenção de jardins automatizados em prédios inteligentes"],c:0,e:"A Bioinformática cruza dados biológicos com computação para avanços na medicina de precisão."},
+            {q:"A ferramenta 'Google Data Science' auxilia pesquisadores principalmente na:",a:["Análise e visualização de grandes volumes de dados complexos","Tradução automática de artigos científicos para latim","Substituição de professores por avatares no metaverso","Compra de equipamentos de laboratório com desconto"],c:0,e:"Oferece um ecossistema para que cientistas processem e visualizem dados sem precisar de supercomputadores físicos."},
+            {q:"O que caracteriza uma 'Câmara de Eco' nas redes sociais?",a:["Ambientes onde o usuário só recebe informações que confirmam seus vieses","Sistemas de som de alta fidelidade para videoconferências","A necessidade de repetir a mesma senha em vários sites","O isolamento total de quem não possui smartphone"],c:0,e:"Algoritmos de recomendação acabam 'ecoando' apenas o que o usuário já gosta ou acredita."},
+            {q:"Qual o impacto da 'Cibercultura' segundo Pierre Lévy?",a:["A mudança nas formas de pensar, conviver e construir a vida social","A transformação de todos os seres humanos em ciborgues biológicos","A exclusão definitiva de quem não fala inglês da internet","O fim de todas as formas de arte que não sejam digitais"],c:0,e:"Para Lévy, a tecnologia não é apenas uma ferramenta, mas um novo ambiente cultural que molda a sociedade."},
+            {q:"A 'Mineração de Texto' na jurisprudência jurídica permite:",a:["Prever tendências de decisões baseadas em milhares de sentenças anteriores","Substituir advogados por sistemas de resposta automática","Eliminar a necessidade de leitura de leis e decretos","Criar novas leis sem a participação do poder legislativo"],c:0,e:"Permite encontrar padrões de entendimento dos juízes, otimizando a estratégia processual."},
+            {q:"Qual o papel da 'Ética por Design' no desenvolvimento de sistemas?",a:["Prever e mitigar preconceitos (vieses) desde o início da criação do software","Criar interfaces coloridas para atrair o público jovem","Aumentar o lucro da empresa através de algoritmos viciantes","Garantir que o software seja gratuito para sempre"],c:0,e:"A ética não deve ser um 'remendo' posterior, mas parte da arquitetura do sistema de IA."},
+            {q:"O 'Hemeroteca Digital' da Biblioteca Nacional é um exemplo de:",a:["Digitalização e acesso democratizado a dados históricos (jornais e revistas)","Um museu físico que proíbe o uso de câmeras fotográficas","Uma rede social para historiadores postarem fotos de viagens","Um sistema de streaming de filmes nacionais antigos"],c:0,e:"Facilita a pesquisa acadêmica ao disponibilizar acervos raros em formato digital acessível."},
+            {q:"A 'IA Generativa' levanta debates sobre 'Alucinação' quando:",a:["O sistema inventa fatos falsos com aparência de verdade","O computador entra em modo de economia de energia","O usuário passa muitas horas jogando no metaverso","A bateria do dispositivo superaquece e trava o sistema"],c:0,e:"A IA tenta completar a informação e, por ser probabilística, pode criar dados inexistentes."},
+            {q:"No contexto de RH, a automação de processos visa prioritariamente:",a:["Liberar o profissional para tarefas de gestão de pessoas e cultura","Demitir todos os funcionários que não sabem programar","Substituir a diretoria por algoritmos de decisão financeira","Impedir que os funcionários conversem durante o expediente"],c:0,e:"Automatiza-se o 'braçal' (folha, triagem) para focar no 'humano' (desenvolvimento, clima)."},
+            {q:"A 'Ciência de Dados' é descrita como a intersecção entre:",a:["Tecnologia, Estatística e Conhecimento do Negócio (Estratégia)","Matemática, Filosofia e Religião","Marketing, Hardware e Vendas porta a porta","Direito, Medicina e Engenharia Civil"],c:0,e:"É o equilíbrio entre saber processar (TI), analisar (Mat/Est) e entender o problema (Negócio)."},
+            {q:"O portal 'Scielo' é fundamental para a ciência brasileira pois:",a:["Garante o acesso gratuito e cooperativo a periódicos científicos","Vende assinaturas de revistas internacionais de alto custo","É a única rede social permitida dentro das universidades","Hospeda vídeos de entretenimento para estudantes"],c:0,e:"É uma das maiores bibliotecas digitais de acesso aberto do mundo, fortalecendo a pesquisa nacional."}
         ]
     },
     fge: {
-        nome: "Fundamentos de Gestão Empresarial",
+        nome: "FUNDAMENTOS DE GESTÃO ESTRATÉGICA",
         questoes: [
-            {q:"Administração é o processo de:",a:["Planejar, organizar, dirigir e controlar recursos","Apenas executar tarefas","Somente controlar pessoas","Reduzir custos"],c:0,e:"Estas são as quatro funções clássicas de Fayol/Taylor (PODC)."},
-            {q:"As organizações podem ser definidas como:",a:["Agrupamentos de pessoas que buscam objetivos comuns","Apenas empresas lucrativas","Somente órgãos públicos","Grupos sem finalidade"],c:0,e:"Qualquer grupo estruturado com um propósito (empresa, ONG, clube) é uma organização."},
-            {q:"Planejamento tem como foco principal:",a:["Definir objetivos e estratégias","Executar atividades","Controlar resultados","Motivar pessoas"],c:0,e:"É a fase de decidir onde se quer chegar e como chegar lá."},
-            {q:"Eficiência refere-se:",a:["Ao uso adequado dos recursos","Ao alcance dos objetivos","À inovação","À criatividade"],c:0,e:"Eficiência é fazer 'certo as coisas' (menos desperdício)."},
-            {q:"Eficácia significa:",a:["Alcançar os objetivos","Reduzir custos","Controlar processos","Evitar desperdícios"],c:0,e:"Eficácia é fazer 'as coisas certas' (atingir o resultado)."},
-            {q:"Efetividade ocorre quando:",a:["Eficiência e eficácia são alcançadas juntas","Há apenas controle","Os custos são reduzidos","Há aumento de produção"],c:0,e:"Efetividade é o impacto real gerado pelo alcance dos objetivos."},
-            {q:"A função organização envolve:",a:["Estruturar recursos e atividades","Controlar resultados","Motivar equipes","Criar estratégias"],c:0,e:"É distribuir as tarefas e responsabilidades entre as pessoas e setores."},
-            {q:"A função direção está ligada a:",a:["Liderança e motivação","Controle financeiro","Planejamento estratégico","Organização estrutural"],c:0,e:"Direção foca na gestão do elemento humano: liderar, motivar e comunicar."},
-            {q:"Controle consiste em:",a:["Comparar resultados com metas","Criar estratégias","Motivar pessoas","Executar tarefas"],c:0,e:"É verificar se o executado condiz com o planejado para corrigir desvios."},
-            {q:"Stakeholders são:",a:["Grupos ou indivíduos afetados pela organização","Apenas acionistas","Somente clientes","Somente funcionários"],c:0,e:"Partes interessadas: clientes, funcionários, governo, sociedade e fornecedores."},
-            {q:"O nível estratégico é responsável por:",a:["Definir objetivos e estratégias","Executar tarefas","Controlar rotinas","Supervisionar produção"],c:0,e:"É o topo da pirâmide (CEO/Diretoria), cuidando do futuro da empresa."},
-            {q:"O nível tático atua principalmente:",a:["Na coordenação das áreas","Na execução operacional","No planejamento estratégico","Na auditoria"],c:0,e:"É o nível de gerência, traduzindo as metas globais para cada departamento."},
-            {q:"O nível operacional realiza:",a:["As atividades do dia a dia","O planejamento","A tomada de decisões estratégicas","O controle financeiro"],c:0,e:"É onde as tarefas são executadas diretamente (base da pirâmide)."},
-            {q:"Marketing tem como objetivo:",a:["Atender às necessidades do mercado","Controlar custos","Produzir bens","Gerenciar pessoas"],c:0,e:"Marketing foca no relacionamento e satisfação do cliente para gerar valor."},
-            {q:"A área financeira busca:",a:["Sustentabilidade econômica","Produção eficiente","Satisfação dos clientes","Gestão de pessoas"],c:0,e:"Garante que a empresa tenha recursos para operar e lucrar."},
-            {q:"Recursos Humanos atua principalmente:",a:["Na gestão de pessoas","Na produção","No marketing","No controle financeiro"],c:0,e:"Cuida de recrutamento, seleção, treinamento e clima organizacional."},
-            {q:"Estrutura organizacional define:",a:["Autoridade e responsabilidades","Salários","Lucros","Tecnologia"],c:0,e:"É o esqueleto da empresa: quem manda em quem e o que cada um faz."},
-            {q:"Organograma é:",a:["Representação gráfica da estrutura","Planejamento estratégico","Relatório financeiro","Ferramenta de marketing"],c:0,e:"Um desenho que mostra a hierarquia da organização."},
-            {q:"Departamentalização funcional baseia-se:",a:["Nas funções organizacionais","Nos clientes","Nos produtos","Na região"],c:0,e:"Separa a empresa em departamentos como Marketing, Finanças, RH, etc."},
-            {q:"Cultura organizacional envolve:",a:["Valores e crenças compartilhadas","Apenas normas formais","Somente tecnologia","Apenas metas financeiras"],c:0,e:"É a 'personalidade' da empresa; o jeito que as coisas são feitas lá dentro."},
-            {q:"Liderança eficaz está relacionada a:",a:["Influenciar pessoas","Centralizar poder","Controlar rigidamente","Aplicar punições"],c:0,e:"Liderar é a capacidade de influenciar positivamente os outros em direção a um objetivo."},
-            {q:"Processos organizacionais são:",a:["Conjunto de atividades interligadas","Apenas tarefas isoladas","Normas legais","Relatórios financeiros"],c:0,e:"Um fluxo de tarefas que transforma entradas em saídas de valor."},
-            {q:"Ambiente externo inclui:",a:["Fatores econômicos, políticos e sociais","Apenas funcionários","Somente máquinas","Apenas clientes"],c:0,e:"São forças fora da empresa que ela não controla, mas que a afetam."},
-            {q:"Ambiente interno envolve:",a:["Pessoas, recursos e estrutura","Concorrência","Economia","Legislação"],c:0,e:"Tudo o que está dentro da empresa e pode ser controlado por ela."},
-            {q:"Missão organizacional define:",a:["A razão de existir da organização","Metas financeiras","Estrutura hierárquica","Salários"],c:0,e:"É o propósito fundamental: 'por que esta empresa existe?'."},
-            {q:"Visão organizacional representa:",a:["Onde a empresa quer chegar","Resultados atuais","Estrutura interna","Processos operacionais"],c:0,e:"É a imagem do futuro que a empresa deseja alcançar daqui a alguns anos."},
-            {q:"Valores organizacionais orientam:",a:["Comportamentos e decisões","Lucros","Tecnologia","Estratégias financeiras"],c:0,e:"São os princípios éticos que norteiam as atitudes de todos na empresa."},
-            {q:"Tomada de decisão envolve:",a:["Escolher entre alternativas","Apenas intuição","Apenas experiência","Somente normas"],c:0,e:"É o processo de identificar problemas e escolher a melhor solução."},
-            {q:"Planejamento estratégico foca no:",a:["Longo prazo","Curto prazo","Dia a dia","Controle operacional"],c:0,e:"Envolve a organização como um todo e olha para o horizonte de vários anos."},
-            {q:"Planejamento operacional refere-se a:",a:["Atividades rotineiras","Estratégias globais","Missão","Visão"],c:0,e:"É o plano detalhado para cada tarefa executada hoje ou nesta semana."},
-            {q:"Inovação organizacional busca:",a:["Melhoria contínua","Manter padrões antigos","Evitar mudanças","Reduzir pessoas"],c:0,e:"Criar novos produtos ou processos para garantir a sobrevivência no mercado."},
-            {q:"Competitividade depende de:",a:["Estratégia e adaptação","Isolamento","Controle rígido","Produção artesanal"],c:0,e:"É a capacidade de se destacar e ser preferido pelos clientes frente à concorrência."},
-            {q:"Descentralização ocorre quando:",a:["Decisões são distribuídas","Tudo é decidido no topo","Não há hierarquia","Não há controle"],c:0,e:"Dá autonomia para níveis inferiores tomarem decisões locais."},
-            {q:"Centralização caracteriza-se por:",a:["Decisões concentradas na alta gestão","Autonomia total","Falta de controle","Ausência de hierarquia"],c:0,e:"Poder de decisão mantido no topo da pirâmide hierárquica."},
-            {q:"Comunicação organizacional eficaz:",a:["Facilita o alcance de objetivos","Gera conflitos","Reduz produtividade","Isola setores"],c:0,e:"Garante que a informação flua sem ruídos entre todos os membros."},
-            {q:"Ética empresarial orienta:",a:["Condutas responsáveis","Apenas lucros","Apenas resultados","Apenas estratégias"],c:0,e:"São padrões morais aplicados ao ambiente de negócios."},
-            {q:"Responsabilidade social envolve:",a:["Compromisso com a sociedade","Somente lucro","Apenas marketing","Redução de custos"],c:0,e:"Quando a empresa age para melhorar a comunidade e o meio ambiente."},
-            {q:"Gestão contemporânea valoriza:",a:["Flexibilidade e adaptação","Rigidez estrutural","Centralização extrema","Rotinas fixas"],c:0,e:"Foca na agilidade para responder às mudanças rápidas do mundo digital."},
-            {q:"Eficiência operacional significa:",a:["Produzir mais com menos recursos","Aumentar custos","Reduzir qualidade","Evitar controle"],c:0,e:"Focar na melhoria dos processos internos para evitar desperdícios de material ou tempo."},
-            {q:"Eficácia estratégica significa:",a:["Alcançar metas estabelecidas","Reduzir produção","Eliminar planejamento","Ignorar concorrência"],c:0,e:"Ter sucesso em implementar o plano que foi definido para o crescimento."},
-            {q:"Análise SWOT avalia:",a:["Forças, fraquezas, oportunidades e ameaças","Somente forças","Apenas oportunidades","Somente ameaças"],c:0,e:"FOFA: Uma ferramenta essencial de diagnóstico estratégico."},
-            {q:"Clima organizacional influencia:",a:["Satisfação e desempenho","Apenas lucros","Tecnologia","Estrutura física"],c:0,e:"Refere-se à percepção dos colaboradores sobre o ambiente de trabalho."},
-            {q:"Capital intelectual representa:",a:["Conhecimento organizacional","Somente dinheiro","Equipamentos","Instalações"],c:0,e:"O valor intangível que reside no saber e experiência das pessoas."},
-            {q:"Planejamento tático desdobra:",a:["Estratégias em ações específicas","Missão organizacional","Valores","Lucros"],c:0,e:"Pega os planos grandes e os divide em metas para os departamentos."},
-            {q:"Planejamento estratégico considera:",a:["Ambiente interno e externo","Somente ambiente interno","Apenas concorrência","Somente finanças"],c:0,e:"Olha tanto para o que a empresa faz bem quanto para as ameaças do mercado."}
+            {q:"Sobre as competências do administrador, as 'Habilidades Conceituais' referem-se a:",a:["Capacidade de enxergar a organização como um todo e pensar estrategicamente","Domínio de ferramentas técnicas e softwares de gestão","Facilidade em lidar com pessoas e motivar equipes","Conhecimento profundo de máquinas e processos produtivos"],c:0,e:"São as habilidades de 'pensar grande', essenciais para o nível estratégico da empresa."},
+            {q:"No ciclo PDCA (ou PODC), a função de 'Controle' tem como objetivo básico:",a:["Comparar o desempenho real com o planejado para corrigir desvios","Executar as tarefas definidas no planejamento","Motivar os funcionários através de liderança carismática","Definir a missão e a visão de longo prazo da empresa"],c:0,e:"O controle fecha o ciclo, garantindo que o que foi planejado está sendo cumprido."},
+            {q:"Qual a principal diferença entre 'Eficiência' e 'Eficácia' na gestão?",a:["Eficiência foca no uso dos recursos; Eficácia foca no alcance do resultado","Eficiência é para empresas grandes; Eficácia é para pequenas","Eficiência foca no lucro; Eficácia foca no faturamento","Não há diferença, são sinônimos de produtividade"],c:0,e:"Eficiência é fazer certo as coisas (meios); Eficácia é fazer as coisas certas (fins)."},
+            {q:"A 'Burocracia', segundo a teoria clássica, visava:",a:["Garantir a previsibilidade e a racionalidade nos processos","Tornar o atendimento ao cliente mais lento e difícil","Aumentar o número de chefes em cada departamento","Substituir o planejamento por regras informais"],c:0,e:"A burocracia surgiu para profissionalizar a gestão, baseando-se em regras e mérito, não em favores."},
+            {q:"O que define o nível 'Tático' de uma organização?",a:["A tradução das estratégias globais em planos para departamentos específicos","A execução direta de tarefas no chão de fábrica","A definição da visão da empresa para os próximos 20 anos","A compra de materiais de escritório e limpeza"],c:0,e:"O tático é o 'meio de campo', ocupado por gerentes que conectam a diretoria à operação."},
+            {q:"Em uma análise SWOT (FOFA), as 'Ameaças' e 'Oportunidades' referem-se a:",a:["Fatores do ambiente externo que a empresa não controla","Características internas da equipe de funcionários","O valor das ações da empresa na bolsa de valores","A quantidade de estoque disponível no armazém"],c:0,e:"SWOT divide em interno (Forças/Fraquezas) e externo (Oportunidades/Ameaças)."},
+            {q:"A 'Liderança Servidora', mencionada em estudos modernos, foca em:",a:["Priorizar as necessidades da equipe para que todos alcencem resultados","Manter o poder centralizado na mão de um único chefe","Garantir que ninguém tome decisões sem autorização prévia","Focar exclusivamente no lucro, ignorando o bem-estar da equipe"],c:0,e:"O líder serve de suporte para que a equipe brilhe e entregue o melhor."},
+            {q:"O conceito de 'Downsizing' na administração moderna significa:",a:["Redução planejada da estrutura organizacional para ganhar agilidade","Aumento do número de funcionários para expandir o mercado","Construção de prédios menores para economizar aluguel","Diminuição da qualidade dos produtos para reduzir custos"],c:0,e:"É o enxugamento da estrutura para eliminar burocracias e custos desnecessários."},
+            {q:"A 'Departamentalização por Clientes' é ideal quando:",a:["A empresa atende públicos com necessidades muito diferentes (ex: VIP vs Varejo)","Todos os produtos da empresa são exatamente iguais","A empresa possui apenas um único fornecedor de matéria-prima","O objetivo é centralizar todas as decisões em um único setor"],c:0,e:"Foca no atendimento personalizado para diferentes perfis de consumidores."},
+            {q:"O que é o 'Benchmarking'?",a:["Processo de comparar as práticas da empresa com as melhores do mercado","Um software de controle de ponto dos funcionários","A técnica de demitir os funcionários menos produtivos","O registro de patentes de novas tecnologias exclusivas"],c:0,e:"É aprender com quem faz melhor, adaptando essas práticas à sua realidade."},
+            {q:"A 'Cultura Organizacional' pode ser descrita como:",a:["O conjunto de valores, crenças e rituais compartilhados pelos membros","O nível de escolaridade médio dos funcionários da empresa","A quantidade de eventos festivos realizados no ano","O manual de instruções de uso dos computadores"],c:0,e:"É o 'DNA' da empresa, o jeito invisível como as coisas funcionam."},
+            {q:"No planejamento, a 'Visão' responde à pergunta:",a:["Onde a organização deseja estar no futuro?","Por que a organização existe hoje?","Quais são os lucros do último trimestre?","Quem são os principais concorrentes da empresa?"],c:0,e:"Diferente da Missão (razão de ser atual), a Visão é o sonho de longo prazo."},
+            {q:"A 'Reengenharia' propõe:",a:["Um redesenho radical dos processos para melhorias drásticas","A troca de lâmpadas comuns por LED para economizar energia","A pintura das máquinas para parecerem novas","O aumento gradual de 1% na produtividade ao ano"],c:0,e:"Reengenharia não é remendo, é começar o processo do zero para ganhar eficiência."},
+            {q:"O que caracteriza uma 'Estrutura Matricial'?",a:["A dupla subordinação: o funcionário responde a um chefe funcional e a um de projeto","A ausência total de chefes e hierarquia dentro da empresa","O fato de todos os funcionários trabalharem em casa (home office)","A centralização de todas as decisões nas mãos de um único estagiário"],c:0,e:"Combina a especialização funcional com o foco em projetos específicos."},
+            {q:"A 'Responsabilidade Social Corporativa' implica que a empresa deve:",a:["Gerar valor para acionistas, sociedade e meio ambiente de forma ética","Apenas doar dinheiro para instituições de caridade para deduzir impostos","Substituir o lucro pelo voluntariado total dos funcionários","Ignorar as leis ambientais se elas diminuírem a produtividade"],c:0,e:"É o compromisso com o desenvolvimento sustentável e impacto social positivo."},
+            {q:"A função 'Direção' lida prioritariamente com:",a:["Gestão de pessoas, liderança e comunicação","Controle de estoques e planilhas financeiras","Manutenção de máquinas e equipamentos de fábrica","Definição de metas de faturamento para daqui a 10 anos"],c:0,e:"Direção é o contato humano, orientando as pessoas para os objetivos."},
+            {q:"Um 'Stakeholder' é definido como:",a:["Qualquer grupo ou indivíduo que afeta ou é afetado pela organização","Apenas o sócio majoritário que detém o controle financeiro","O principal concorrente da empresa no mercado local","O software usado para gerenciar as vendas online"],c:0,e:"Inclui funcionários, clientes, governo, fornecedores e comunidade."},
+            {q:"O 'Clima Organizacional' difere da Cultura por ser:",a:["A percepção momentânea e psicológica do ambiente de trabalho","O conjunto de regras escritas no estatuto da empresa","A temperatura média do ar condicionado nos escritórios","O lucro líquido dividido pelo número de colaboradores"],c:0,e:"Cultura é profunda e estável; Clima é a 'atmosfera' do momento (está bom ou ruim trabalhar aqui hoje?)."},
+            {q:"A 'Gestão por Processos' foca em:",a:["Fluxos de trabalho que atravessam departamentos para entregar valor ao cliente","Manter cada funcionário isolado em sua mesa fazendo apenas sua tarefa","Aumentar o número de reuniões semanais entre a diretoria","Garantir que o organograma seja a coisa mais importante da empresa"],c:0,e:"O processo olha para a entrega final, ignorando as 'paredes' entre os setores."},
+            {q:"O conceito de 'Sustentabilidade Econômica' na área financeira busca:",a:["Garantir que a empresa tenha recursos para operar no longo prazo","Gastar todo o lucro em marketing no primeiro mês de operação","Manter o menor número possível de clientes para evitar problemas","Não pagar fornecedores para aumentar o caixa disponível"],c:0,e:"Garante a saúde financeira para que a organização sobreviva e cresça."},
+            {q:"O 'Capital Intelectual' de uma empresa é composto por:",a:["Conhecimento, experiência e criatividade das pessoas da organização","A soma de todos os computadores e móveis do escritório","O saldo bancário disponível na conta corrente da empresa","O valor da marca se ela fosse vendida para um concorrente"],c:0,e:"É o ativo intangível mais valioso na economia da informação."},
+            {q:"O 'Design Thinking' é usado na gestão para:",a:["Resolver problemas complexos com foco na empatia e inovação","Escolher as cores das paredes da recepção da empresa","Criar logotipos mais modernos para os produtos antigos","Aumentar o controle sobre o horário de chegada dos funcionários"],c:0,e:"É uma abordagem centrada no ser humano para inovar em produtos e processos."}
         ]
     }
 };
@@ -266,7 +221,7 @@ function preparar() {
             q: p.q, 
             a: alts.map(a=>a.texto), 
             c: alts.findIndex(a=>a.c),
-            e: p.e // Preserva a explicação
+            e: p.e
         };
     });
     respostas = new Array(perguntas.length).fill(null);
@@ -309,45 +264,52 @@ function render() {
             div.appendChild(label);
         });
 
-        // Adiciona a explicação se a pergunta foi respondida
         if(jaRespondeu) {
-            const expDiv = document.createElement("div");
-            expDiv.className = "explanation";
-            expDiv.innerHTML = `<strong>💡 Explicação:</strong> ${p.e}`;
-            div.appendChild(expDiv);
+            const exp = document.createElement("div");
+            exp.className = "explanation";
+            exp.innerHTML = `<strong>Explicação:</strong> ${p.e}`;
+            div.appendChild(exp);
         }
-
+        
         quiz.appendChild(div);
     });
 }
 
-function sortear() { 
-    preparar(); 
-    document.getElementById("resultado").style.display = "none"; 
-    stats(); 
-    render(); 
-    window.scrollTo(0,0); 
+function sortear() {
+    preparar();
+    stats();
+    render();
+    document.getElementById("resultado").style.display = "none";
+    window.scrollTo(0,0);
 }
 
-function alternarMateria() { 
-    materiaAtiva = (materiaAtiva === "tecnologia") ? "fge" : "tecnologia"; 
-    document.getElementById("materia-txt").innerText = "Matéria: " + banco[materiaAtiva].nome; 
-    sortear(); 
+function alternarMateria() {
+    materiaAtiva = (materiaAtiva === "tecnologia") ? "fge" : "tecnologia";
+    document.getElementById("materia-txt").innerText = "Matéria: " + banco[materiaAtiva].nome;
+    sortear();
 }
 
 function finalizar() {
+    let respondidas = respostas.filter(r => r !== null).length;
+    if(respondidas < perguntas.length) {
+        alert("Por favor, responda todas as questões antes de finalizar!");
+        return;
+    }
     let acertos = 0;
-    let total = perguntas.length;
     respostas.forEach((r, i) => { if(r === perguntas[i].c) acertos++; });
+    const perc = ((acertos/perguntas.length)*100).toFixed(1);
+    
     const resDiv = document.getElementById("resultado");
     resDiv.style.display = "block";
-    resDiv.innerHTML = `Simulado Concluído!<br>Pontuação: ${acertos} de ${total} (${((acertos/total)*100).toFixed(1)}%)`;
-    resDiv.style.background = (acertos/total >= 0.7) ? "#dcfce7" : "#fee2e2";
-    window.scrollTo({ top: document.body.scrollHeight, behavior: 'smooth' });
+    resDiv.style.background = perc >= 70 ? "#dcfce7" : "#fee2e2";
+    resDiv.style.color = perc >= 70 ? "#166534" : "#991b1b";
+    resDiv.innerHTML = `Resultado Final: ${acertos} acertos de ${perguntas.length} (${perc}%)`;
+    window.scrollTo(0, document.body.scrollHeight);
 }
 
 preparar();
 render();
 </script>
+
 </body>
 </html>
