@@ -1,0 +1,352 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+<meta charset="UTF-8">
+<title>Sistema de Revisão de Conteúdos - Nível Avançado</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<style>
+:root {
+    --primary: #2563eb;
+    --success: #16a34a;
+    --danger: #dc2626;
+    --bg-gradient: linear-gradient(135deg,#0f2027,#203a43,#2c5364);
+}
+
+body {
+    margin:0;
+    font-family: 'Segoe UI', Arial, sans-serif;
+    background: var(--bg-gradient);
+    background-attachment: fixed;
+    color: #333;
+}
+
+.progress-container {
+    position: fixed;
+    top: 0; left: 0; width: 100%; height: 8px;
+    background: rgba(255,255,255,0.2);
+    z-index: 1000;
+}
+.progress-bar {
+    height: 100%;
+    background: #4ade80;
+    width: 0%;
+    transition: width 0.3s;
+}
+
+.container {
+    max-width: 900px;
+    margin: 40px auto;
+    background: #ffffff;
+    padding: 30px;
+    border-radius: 12px;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+}
+
+.header-info {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background: #f1f5f9;
+    padding: 15px;
+    border-radius: 8px;
+    margin-bottom: 20px;
+    font-weight: bold;
+}
+
+.question {
+    background:#f9fafb;
+    padding:20px;
+    border-radius:10px;
+    margin-bottom:20px;
+    border-left:6px solid #cbd5e1;
+    transition: 0.3s;
+}
+
+.question.answered {
+    opacity: 0.95;
+    pointer-events: none; 
+}
+
+.question.correct { border-left-color: var(--success); background: #f0fdf4; }
+.question.wrong { border-left-color: var(--danger); background: #fef2f2; }
+
+label {
+    display:block;
+    padding:12px;
+    margin:8px 0;
+    border-radius:6px;
+    cursor:pointer;
+    border: 1px solid #e2e8f0;
+    transition: 0.2s;
+    background: white;
+}
+
+label.correct { background:#dcfce7 !important; border-color: #16a34a; font-weight: bold; color: #166534; }
+label.wrong { background:#fee2e2 !important; border-color: #dc2626; font-weight: bold; color: #991b1b; }
+
+.explanation {
+    margin-top: 10px;
+    padding: 10px;
+    background: #e0f2fe;
+    border-radius: 5px;
+    font-size: 0.9em;
+    color: #0369a1;
+    border: 1px solid #bae6fd;
+}
+
+.controls {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 10px;
+    margin-bottom: 20px;
+}
+
+button {
+    padding:14px;
+    border:none;
+    border-radius:8px;
+    font-size:15px;
+    cursor:pointer;
+    font-weight: bold;
+    color: white;
+}
+.btn-sortear { background:#2563eb; }
+.btn-trocar { background:#6366f1; }
+.btn-finalizar { background:#16a34a; width: 100%; margin-top: 10px; font-size: 18px; }
+
+.resultado-box {
+    font-size:22px;
+    font-weight:bold;
+    text-align:center;
+    margin-top:20px;
+    padding: 20px;
+    border-radius: 8px;
+    display: none;
+}
+</style>
+</head>
+<body>
+
+<div class="progress-container"><div class="progress-bar" id="barra"></div></div>
+
+<div class="container">
+    <h1 style="text-align:center; margin-top:0; color: #1e293b;">Sistema de Revisão </h1>
+    
+    <div class="header-info">
+        <div id="materia-txt">Matéria: TECNOLOGIA EMERGENTE E PROTAGONISMO</div>
+        <div id="status-txt">Acertos: 0 / Respondidas: 0</div>
+    </div>
+
+    <div class="controls">
+        <button class="btn-sortear" onclick="sortear()">🔀 Reiniciar / Embaralhar</button>
+        <button class="btn-trocar" onclick="alternarMateria()">📚 Trocar Matéria</button>
+    </div>
+
+    <div id="quiz"></div>
+
+    <button class="btn-finalizar" onclick="finalizar()">Ver Resultado Final</button>
+    <div id="resultado" class="resultado-box"></div>
+</div>
+
+<script>
+const banco = {
+    tecnologia: {
+        nome: "TECNOLOGIA EMERGENTE E PROTAGONISMO",
+        questoes: [
+            {q:"Qual a tese central de Pierre Lévy sobre a Cibercultura e a técnica?",a:["A técnica é o resultado de um conflito de interesses entre grupos humanos e molda a cultura","A técnica é neutra e não possui impacto nas relações sociais","O ciberespaço é apenas uma ferramenta de entretenimento sem fins educacionais","A cibercultura impede o desenvolvimento da inteligência coletiva"],c:0,e:"Lévy defende que o ciberespaço é um ambiente que emerge da inteligência coletiva e do conflito social."},
+            {q:"No contexto da Ciência Aberta, qual o principal objetivo do movimento?",a:["Construção coletiva do saber e acesso gratuito a informações científicas","Privatização de bases de dados acadêmicas para gerar lucro","Restrição de dados científicos apenas para pesquisadores com doutorado","Eliminação total de periódicos digitais para retornar ao papel"],c:0,e:"A Ciência Aberta visa democratizar o conhecimento, removendo barreiras financeiras e técnicas."},
+            {q:"O conceito de 'Ethics by Design' propõe que:",a:["A ética deve ser integrada ao software desde o início de sua concepção e arquitetura","A ética é responsabilidade exclusiva do usuário final e não do desenvolvedor","Sistemas de IA não precisam de ética, pois são baseados em matemática pura","Discussões éticas devem ocorrer apenas se houver um processo judicial"],c:0,e:"Refere-se à inclusão de princípios morais e proteção de dados diretamente no design do sistema."},
+            {q:"No jornalismo de dados, o que significa a técnica de 'Entrevistar Planilhas'?",a:["Interrogar bases de dados com rigor investigativo para extrair histórias ocultas","Usar inteligência artificial para ler planilhas em voz alta em entrevistas","Entrevistar os criadores de softwares de edição de texto","Substituir o jornalista por um algoritmo de preenchimento automático"],c:0,e:"É uma metáfora para a análise crítica e profunda de dados brutos para encontrar furos de reportagem."},
+            {q:"Qual a definição técnica de 'Alucinação' em Modelos de Linguagem (LLMs)?",a:["Quando a IA gera informações factualmente incorretas com alta convicção linguística","A incapacidade da IA de responder perguntas por falta de energia","O uso de cores excessivas na interface do chat de IA","Quando a IA demonstra sinais de consciência e rebeldia contra o usuário"],c:0,e:"Ocorre quando o modelo 'inventa' fatos de forma convincente devido à sua natureza probabilística."},
+            {q:"A 'Transparência Ativa' prevista na Lei de Acesso à Informação (LAI) exige:",a:["A divulgação espontânea de dados de interesse público pelo governo em sites","Apenas o fornecimento de dados após uma solicitação formal via protocolo","O sigilo total de salários de servidores públicos","O pagamento de taxas para que o cidadão possa ler documentos do governo"],c:0,e:"Ativa é quando o órgão publica proativamente; Passiva é quando o cidadão precisa pedir."},
+            {q:"O movimento 'DataOps' visa resolver qual problema nas empresas?",a:["A morosidade e falta de qualidade no ciclo de entrega e análise de dados","O excesso de funcionários na área de recursos humanos","A falta de computadores físicos nos escritórios modernos","A necessidade de traduzir dados para línguas mortas"],c:0,e:"Aplica princípios de agilidade (DevOps) para acelerar a transformação de dados em insights."},
+            {q:"Por que a 'Pós-Verdade' é considerada um risco para o desenvolvimento científico?",a:["Porque afetos e crenças pessoais sobrepõem-se aos fatos objetivos e evidências","Porque a tecnologia eliminou a necessidade de fazer experimentos laboratoriais","Porque os cientistas pararam de publicar artigos em revistas famosas","Porque as fake news são mais rápidas do que a velocidade da internet"],c:0,e:"Na pós-verdade, a opinião emocional do público ignora o consenso científico provado."},
+            {q:"Na ciência de dados, o que caracteriza os 'Dados Não Estruturados'?",a:["Dados que não possuem formato fixo, como vídeos, áudios e textos soltos","Informações organizadas em tabelas SQL com colunas definidas","Dados que foram corrompidos por vírus de computador","Registros de nascimento e óbito em cartórios físicos"],c:0,e:"A maioria dos dados hoje (80%+) são desestruturados e exigem IA para processamento."},
+            {q:"O 'Lifelong Learning' é uma estratégia necessária na era digital porque:",a:["A obsolescência técnica é acelerada e exige atualização constante de competências","O cérebro humano está diminuindo de tamanho devido ao uso de tablets","As empresas não querem mais contratar pessoas com diplomas superiores","A internet deixará de existir nos próximos dez anos"],c:0,e:"A educação continuada é o único caminho para manter a empregabilidade em um mundo disruptivo."},
+            {q:"A 'IA Causal' diferencia-se do aprendizado de máquina tradicional por:",a:["Identificar relações de causa e efeito em vez de simples correlações estatísticas","Não precisar de dados para funcionar, apenas de regras lógicas","Ser capaz de prever apenas eventos que já aconteceram no passado","Funcionar exclusivamente em computadores quânticos de alta potência"],c:0,e:"A IA Causal tenta entender 'por que' algo acontece, o que é vital para tomadas de decisão."},
+            {q:"No 'Data Storytelling', qual o papel da narrativa?",a:["Dar contexto e significado aos dados para guiar a tomada de decisão","Enfeitar gráficos mal feitos para esconder resultados negativos","Substituir os dados brutos por fábulas e histórias lúdicas","Explicar como o software de BI foi programado"],c:0,e:"Dados sem história são apenas números; a narrativa transforma o dado em conhecimento acionável."},
+            {q:"O termo 'Imaginário Tecnológico' refere-se a:",a:["Expectativas e medos sociais projetados sobre o futuro das máquinas","Um tipo de software de realidade virtual usado por arquitetos","A capacidade de programar sem usar o teclado do computador","O delírio de que a tecnologia nunca falhará"],c:0,e:"Representa as projeções culturais e mitos que criamos sobre o impacto da técnica."},
+            {q:"A 'Hemeroteca Digital' da Biblioteca Nacional é um exemplo de protagonismo ao:",a:["Democratizar o acesso à memória histórica por meio da digitalização de periódicos","Vender jornais antigos para colecionadores internacionais","Proibir o uso de documentos históricos em pesquisas escolares","Cobrar mensalidades para que pesquisadores vejam jornais do império"],c:0,e:"Permite que qualquer cidadão acesse gratuitamente fontes históricas primárias pela rede."},
+            {q:"O conceito de 'Curadoria de Dados' no Big Data científico serve para:",a:["Garantir a integridade, preservação e organização dos dados para reuso","Deletar dados antigos que não são mais acessados por ninguém","Criptografar dados para que apenas o autor original os veja","Vender pacotes de informações para empresas de publicidade"],c:0,e:"Curadoria é essencial para que o volume massivo de dados não se torne ruído inútil."},
+            {q:"Qual a função do 'Processamento de Linguagem Natural' (PLN)?",a:["Permitir que computadores entendam, interpretem e gerem linguagem humana","Traduzir códigos de programação para línguas indígenas brasileiras","Aumentar a velocidade de digitação em teclados mecânicos","Substituir a necessidade de leitura e escrita para seres humanos"],c:0,e:"O PLN é o coração dos chatbots, tradutores automáticos e análise de sentimentos."},
+            {q:"Sobre o 'User Experience' (UX) em ferramentas de dados, é correto afirmar:",a:["Foca na facilidade e satisfação do usuário ao interagir com o sistema","Busca tornar o software o mais complexo possível para evitar invasões","Preocupa-se apenas com a cor dos botões e o logotipo da empresa","Serve para monitorar o comportamento privado do usuário sem consentimento"],c:0,e:"UX visa garantir que a ferramenta de dados seja intuitiva e útil para quem a opera."},
+            {q:"A 'Cidadania Digital' envolve o exercício de:",a:["Direitos e deveres éticos e seguros no uso das tecnologias de informação","Ter nacionalidade de um país que produz semicondutores","Votar apenas através de redes sociais em todas as eleições","Possuir o smartphone mais caro do mercado atual"],c:0,e:"Envolve literacia midiática, ética, segurança e participação cívica online."},
+            {q:"O que é o 'Filtro Bolha' (Filter Bubble) nas redes sociais?",a:["Isolamento intelectual onde algoritmos mostram apenas o que o usuário já concorda","Um sistema de proteção de tela que evita o superaquecimento do celular","A camada de ozônio digital que protege os servidores de ataques solares","A proibição de conversar com pessoas de outros países na internet"],c:0,e:"O algoritmo reforça as crenças do usuário, limitando o contraditório e o debate."},
+            {q:"A 'Soberania Digital' de um país refere-se à:",a:["Capacidade de controlar seus próprios dados, infraestrutura e leis online","Proibição total de internet estrangeira no território nacional","Obrigação de todos os cidadãos terem um blog pessoal do governo","Dominação militar do espaço através de satélites espiões"],c:0,e:"Trata-se da autonomia tecnológica de uma nação frente a big techs estrangeiras."},
+            {q:"O que define uma 'Inovação Disruptiva'?",a:["Uma tecnologia que desestrutura o mercado existente e cria um novo paradigma","Uma inovação que acontece apenas em laboratórios de física nuclear","Um upgrade simples de hardware que não muda o comportamento do usuário","A quebra proposital de aparelhos eletrônicos para reciclagem"],c:0,e:"Disrupção altera modelos de negócio e formas de consumo (ex: Netflix, Uber)."},
+            {q:"A 'Internet das Coisas' (IoT) contribui para o Big Data ao:",a:["Gerar fluxos massivos de dados em tempo real através de sensores em objetos","Reduzir a necessidade de conexão Wi-Fi em residências urbanas","Impedir que eletrodomésticos consumam muita energia elétrica","Substituir a necessidade de armazenamento na nuvem por cabos físicos"],c:0,e:"Sensores em tudo geram dados contínuos que alimentam sistemas de análise preditiva."},
+            {q:"O termo 'Deep Learning' refere-se a:",a:["Redes neurais artificiais com múltiplas camadas para aprendizado complexo","O ato de estudar por muitas horas usando apenas livros físicos","Um software que limpa arquivos pesados do disco rígido automaticamente","Uma técnica de mergulho profundo para consertar cabos submarinos"],c:0,e:"É uma subárea do Machine Learning responsável por reconhecimentos avançados."},
+            {q:"Qual o impacto da 'Computação Quântica' na segurança de dados?",a:["Pode quebrar a criptografia atual, exigindo novos métodos de segurança","Torna a internet 100% segura e impossível de ser hackeada","Elimina a necessidade de senhas e autenticação de dois fatores","Garante que dados nunca sejam perdidos, mesmo se o computador quebrar"],c:0,e:"A potência quântica desafia os algoritmos de criptografia baseados em fatoração."},
+            {q:"O 'Ceticismo Informacional' é uma habilidade que visa combate o quê?",a:["A aceitação passiva de fake news e desinformação online","A instalação de softwares originais e licenciados","O uso de internet por pessoas idosas","A evolução dos processadores de computadores portáteis"],c:0,e:"É a prática de duvidar e verificar fontes antes de compartilhar informações."},
+            {q:"A 'Bioinformática' é a aplicação de ciência de dados na:",a:["Biologia e Medicina para entender genomas e doenças","Fabricação de peças de computador feitas de material orgânico","Criação de redes sociais exclusivas para médicos e veterinários","Monitoração de florestas através de câmeras de alta resolução"],c:0,e:"Usa algoritmos para analisar sequências de DNA e proteínas em grande escala."},
+            {q:"A 'Visualização de Dados' eficaz deve priorizar:",a:["Clareza e precisão para que o cérebro processe a informação rapidamente","O uso do maior número possível de cores e efeitos 3D","A ocultação de dados discrepantes para manter a estética do gráfico","A inclusão de todas as planilhas brutas dentro da imagem"],c:0,e:"Gráficos bons reduzem a carga cognitiva e evidenciam padrões ou anomalias."},
+            {q:"O conceito de 'Pegada Digital' (Digital Footprint) refere-se a:",a:["O rastro de dados deixado pelo usuário em todas as interações online","A marca física do dedo na tela do dispositivo eletrônico","A quantidade de energia que um smartphone consome por dia","O desenho de um pé feito através de inteligência artificial generativa"],c:0,e:"Toda ação online (clique, busca, post) compõe o histórico persistente do usuário."},
+            {q:"A 'Privacidade por Padrão' (Privacy by Default) exige que:",a:["As configurações mais seguras venham ativadas automaticamente no app","O usuário pague uma taxa extra para ter seus dados protegidos","O governo monitore todas as conversas privadas para evitar crimes","O software delete todos os dados do usuário a cada 24 horas"],c:0,e:"Protege o usuário leigo garantindo que ele não precise configurar o sigilo manualmente."},
+            {q:"O que é 'Dark Data' no contexto das organizações?",a:["Dados coletados mas nunca utilizados para obter insights ou decisões","Informações que circulam apenas na 'Deep Web' por hackers","Arquivos que só podem ser lidos se o monitor estiver no modo noturno","Dados que foram apagados mas permanecem fisicamente no HD"],c:0,e:"Representa desperdício de armazenamento e riscos de segurança sem benefício."},
+            {q:"A 'Computação de Borda' (Edge Computing) tem como vantagem:",a:["Processar dados perto da fonte, reduzindo latência e uso de largura de banda","Colocar servidores nas fronteiras geográficas entre países rivais","Um tipo de design de computador com bordas infinitas e imersivas","Programar softwares que funcionam apenas nas bordas da internet"],c:0,e:"Essencial para carros autônomos e cirurgias remotas onde o tempo de resposta é crítico."},
+            {q:"O que define a 'Economia da Atenção'?",a:["A disputa de plataformas pelo tempo e engajamento do usuário como recurso valioso","A venda de aparelhos eletrônicos apenas para quem presta atenção em aulas","O pagamento de salários extras para funcionários que não usam celular","O imposto cobrado sobre propagandas que usam sons muito altos"],c:0,e:"O tempo do usuário é o produto; empresas moldam algoritmos para nos manter conectados."},
+            {q:"O 'Gêmeo Digital' (Digital Twin) é utilizado para:",a:["Criar uma réplica virtual de um sistema físico para simular comportamentos","Ter dois perfis iguais na mesma rede social para evitar banimentos","Um robô que possui exatamente a mesma aparência que o seu criador humano","O backup automático de todas as fotos do celular na nuvem do Google"],c:0,e:"Permite prever falhas em turbinas, prédios ou cidades antes que ocorram no mundo real."},
+            {q:"A 'Alfabetização de Dados' (Data Literacy) é a capacidade de:",a:["Ler, interpretar, escrever e comunicar dados em um contexto","Decorar todos os números de uma tabela de Excel sem ajuda de software","Saber consertar uma planilha que parou de funcionar por erro de fórmula","Criar novas línguas baseadas apenas em códigos binários de zeros e uns"],c:0,e:"É uma competência essencial para profissionais de todas as áreas na era digital."},
+            {q:"O termo 'Low-code' refere-se a plataformas que permitem:",a:["Desenvolver softwares com o mínimo de codificação manual, usando interfaces visuais","Programar usando apenas números baixos e letras minúsculas","Criar códigos de baixa qualidade para baratear o custo da empresa","Programar apenas para computadores muito antigos com pouco poder"],c:0,e:"Democratiza a criação de softwares e automações para quem não é desenvolvedor."},
+            {q:"Qual o risco ético do 'Reconhecimento Facial' em massa?",a:["Viés discriminatório e vigilância invasiva da privacidade dos cidadãos","O software confundir o rosto do usuário com o de um animal doméstico","O aumento do consumo de bateria nos smartphones de última geração","A necessidade de as pessoas pararem de usar maquiagem na rua"],c:0,e:"Algoritmos podem falhar mais com minorias e facilitar o controle estatal indevido."},
+            {q:"O 'Open Source' (Código Aberto) contribui para o protagonismo ao:",a:["Permitir transparência, colaboração global e auditoria do código-fonte","Obrigar o usuário a pagar licenças anuais caríssimas para usar o sistema","Proibir que qualquer pessoa veja como o software foi construído por dentro","Garantir que apenas uma empresa tenha o monopólio da tecnologia"],c:0,e:"Promove a liberdade tecnológica e o aprendizado através da modificação comunitária."},
+            {q:"Na era da IA, o que é a 'Curadoria de Conteúdo'?",a:["Selecionar e organizar informações de valor em meio ao excesso de ruído digital","Deletar todas as postagens antigas das redes sociais por segurança","Deixar que algoritmos decidam 100% do que devemos ler todos os dias","Copiar e colar textos inteiros sem citar a fonte ou o autor original"],c:0,e:"É um processo humano-centrado de agregação de valor e verificação de relevância."},
+            {q:"O que é 'Interoperabilidade' entre sistemas?",a:["A capacidade de diferentes sistemas e organizações de trabalharem juntos e trocar dados","A proibição de usar dois programas ao mesmo tempo no mesmo computador","O conflito que acontece quando dois softwares tentam usar a mesma memória","A tradução manual de dados de um sistema para o outro via digitadores"],c:0,e:"Sistemas interoperáveis 'conversam' entre si, o que é vital para o governo digital."},
+            {q:"Qual a proposta da 'Web 3.0' (Web Descentralizada)?",a:["Uma internet baseada em blockchain onde o usuário é dono de seus próprios dados","Uma rede que funciona apenas via rádio sem necessidade de cabos de fibra","A volta das páginas estáticas que não permitem interação com o usuário","O fim definitivo das redes sociais e do comércio eletrônico global"],c:0,e:"Busca tirar o poder das grandes big techs e devolver a soberania ao usuário."},
+            {q:"O 'Machine Learning' supervisionado utiliza o quê para aprender?",a:["Dados rotulados (exemplos com a resposta correta) para treinar o modelo","A intuição divina da máquina que aprende sem nenhuma base de dados","O monitoramento constante das câmeras da casa do programador","Apenas o erro aleatório até que a máquina acerte por sorte"],c:0,e:"O modelo aprende a prever saídas a partir de padrões em dados já conhecidos."},
+            {q:"Qual o papel das 'Fintechs' na transformação digital?",a:["Uso de tecnologia para desintermediar e agilizar serviços financeiros","Criação de novas cédulas de papel moeda que brilham no escuro","Empresas que consertam apenas caixas eletrônicos de bancos físicos","A proibição do uso de dinheiro físico em todos os países do mundo"],c:0,e:"Elas democratizam o acesso ao crédito e pagamentos através da digitalização."},
+            {q:"O que é 'Análise Preditiva'?",a:["Uso de dados históricos e modelos estatísticos para prever eventos futuros","O ato de adivinhar o que o chefe vai dizer na reunião de segunda-feira","Uma técnica para descobrir quem apagou arquivos do servidor central","A tradução de línguas antigas para prever o fim do mundo"],c:0,e:"Essencial para prever demandas de estoque, fraudes ou doenças."},
+            {q:"O 'Trabalho Híbrido' exige competências digitais de:",a:["Autogestão, colaboração remota e domínio de ferramentas de comunicação","Saber dirigir carros elétricos e híbridos para chegar ao escritório","Possuir dois computadores diferentes em casa para trabalhar em dobro","Aprender a programar em duas linguagens ao mesmo tempo"],c:0,e:"Exige maturidade no uso de ferramentas como Teams, Slack e ferramentas na nuvem."},
+            {q:"Qual a função do 'Chief Data Officer' (CDO) nas empresas?",a:["Responsável pela estratégia, governança e valor dos dados da organização","O funcionário que limpa as salas onde ficam os servidores de dados","A pessoa que digita todos os dados manuais nas planilhas do Excel","O segurança que impede a entrada de estranhos na empresa física"],c:0,e:"O CDO transforma o dado em um ativo estratégico de negócio."}
+        ]
+    },
+    fge: {
+        nome: "FUNDAMENTOS DE GESTÃO EMPRESARIAL",
+        questoes: [
+            {q:"Quais são as quatro funções clássicas da Administração propostas por Fayol?",a:["Planejar, Organizar, Dirigir e Controlar (PODC)","Vender, Produzir, Financiar e Recrutar","Inovar, Competir, Lucrar e Expandir","Comprar, Estocar, Vender e Entregar"],c:0,e:"Essas funções formam o ciclo administrativo básico em qualquer organização."},
+            {q:"O conceito de 'Eficiência' na gestão empresarial refere-se a:",a:["Realizar as tarefas da maneira correta, otimizando o uso dos recursos","Alcançar o objetivo final, independentemente do custo envolvido","Atingir o lucro máximo no menor tempo possível sem planejamento","Substituir todos os funcionários por máquinas automatizadas"],c:0,e:"Eficiência foca nos meios; eficácia foca nos fins (resultados)."},
+            {q:"A 'Análise SWOT' (ou FOFA) serve para avaliar:",a:["Forças, Oportunidades, Fraquezas e Ameaças da organização","A velocidade da conexão de internet da empresa","O desempenho individual de cada funcionário em vendas","A quantidade de estoque disponível para o próximo mês"],c:0,e:"É uma ferramenta de diagnóstico estratégico para analisar ambiente interno e externo."},
+            {q:"O nível 'Estratégico' de uma organização é ocupado por:",a:["Presidentes, diretores e alta cúpula que decidem o longo prazo","Gerentes de departamento que cuidam do médio prazo","Supervisores de linha de frente que cuidam do dia a dia","Estagiários e assistentes administrativos em treinamento"],c:0,e:"No topo da pirâmide, o foco é a visão global e o futuro da empresa."},
+            {q:"A 'Estrutura Matricial' caracteriza-se por:",a:["Dupla subordinação, onde o funcionário responde a dois chefes (funcional e projeto)","Uma hierarquia rígida onde ninguém pode falar com o diretor","A ausência total de chefes, sendo uma autogestão absoluta","Uma organização baseada apenas em laços familiares e amizade"],c:0,e:"Combina a especialização funcional com o foco em projetos ou produtos."},
+            {q:"O conceito de 'Stakeholders' envolve:",a:["Todas as partes interessadas que afetam ou são afetadas pela organização","Apenas os acionistas que investiram dinheiro na empresa","Os concorrentes diretos que tentam roubar clientes","Somente os funcionários que possuem carteira assinada"],c:0,e:"Inclui clientes, funcionários, governo, sociedade, fornecedores e acionistas."},
+            {q:"A 'Responsabilidade Social Corporativa' (RSC) defende que:",a:["A empresa deve gerar valor para a sociedade e ambiente, além do lucro","A única função da empresa é pagar impostos em dia ao governo","O lucro deve ser distribuído apenas entre os diretores da firma","Empresas não devem se envolver em questões sociais ou ambientais"],c:0,e:"A RSC integra preocupações sociais e ambientais nas operações de negócio."},
+            {q:"O 'Benchmarking' é uma técnica de gestão que consiste em:",a:["Comparar processos e desempenho com os melhores do mercado para aprender","Copiar exatamente os produtos do concorrente para vender mais barato","Demitir funcionários que possuem desempenho abaixo da média da equipe","Criar marcas falsas para confundir os consumidores na hora da compra"],c:0,e:"É um processo de pesquisa contínuo para adaptar melhores práticas externas."},
+            {q:"A 'Cultura Organizacional' pode ser definida como:",a:["O conjunto de valores, crenças e rituais compartilhados pelos membros","A quantidade de livros que a empresa possui em sua biblioteca","A obrigatoriedade de falar uma língua estrangeira no escritório","O estilo de decoração e arquitetura do prédio da empresa"],c:0,e:"É a 'personalidade' da empresa que dita como as coisas são feitas ali."},
+            {q:"O 'Downsizing' é uma estratégia que visa:",a:["Reduzir a estrutura hierárquica para tornar a empresa mais ágil e eficiente","Aumentar o número de gerentes para ter mais controle sobre a base","Mudar a sede da empresa para um prédio menor para economizar aluguel","Diminuir o tamanho físico dos produtos para facilitar o transporte"],c:0,e:"Envolve a eliminação de níveis burocráticos e enxugamento da organização."},
+            {q:"A função 'Direção' na administração está ligada principalmente a:",a:["Liderança, motivação e comunicação com as pessoas","Contabilidade, auditoria e conferência de notas fiscais","Compra de matérias-primas e gestão de estoques físicos","Definição de metas de faturamento para os próximos cinco anos"],c:0,e:"Direção foca no elemento humano e na coordenação dos esforços da equipe."},
+            {q:"O 'Clima Organizacional' refere-se à:",a:["Percepção coletiva dos funcionários sobre o ambiente de trabalho","Temperatura média do ar-condicionado dentro do escritório","Previsão do tempo para a região onde a fábrica está localizada","Quantidade de conflitos físicos entre diretores e subordinados"],c:0,e:"Diferente da cultura (profunda), o clima é a 'atmosfera' do momento na empresa."},
+            {q:"A 'Reengenharia' organizacional propõe:",a:["O redesenho radical de processos para obter melhorias drásticas de performance","A manutenção de todos os processos antigos com novos nomes modernos","A demissão de todos os engenheiros da empresa para contratar administradores","O conserto de máquinas velhas para evitar a compra de novas"],c:0,e:"Foca em começar do zero e questionar por que os processos são feitos daquela forma."},
+            {q:"O 'Planejamento Tático' é desenvolvido para o:",a:["Médio prazo e foca em departamentos ou unidades específicas","Longo prazo e abrange a organização como um todo (visão global)","Curto prazo e foca nas tarefas diárias de cada funcionário","Passado, servindo apenas para analisar o que deu errado"],c:0,e:"O tático traduz a estratégia global para as gerências de área."},
+            {q:"A 'Teoria da Burocracia' de Max Weber visava:",a:["Organização baseada na racionalidade, impessoalidade e meritocracia","A criação de muitas filas e carimbos para dificultar a vida do cliente","A indicação de parentes para cargos de confiança (nepotismo)","A ausência total de regras para dar liberdade total ao trabalhador"],c:0,e:"Na gestão, burocracia significa organização técnica baseada em regras claras."},
+            {q:"A 'Administração Científica' de Taylor focava em:",a:["Eficiência operacional através do estudo de tempos e movimentos","Bem-estar emocional e psicológico do trabalhador acima da produção","Expansão global da empresa através de fusões e aquisições","Uso de laboratórios de química para criar novos plásticos"],c:0,e:"O foco era a racionalização do trabalho no nível operacional (chão de fábrica)."},
+            {q:"O que é 'Capital Intelectual'?",a:["Soma dos conhecimentos, experiências e habilidades das pessoas na empresa","O valor em dinheiro que a empresa possui guardado no banco central","A quantidade de computadores de última geração comprados no ano","O estoque de produtos acabados prontos para serem vendidos"],c:0,e:"É um ativo intangível vital para a vantagem competitiva moderna."},
+            {q:"O 'Balanced Scorecard' (BSC) é uma ferramenta de:",a:["Gestão estratégica que mede desempenho além dos indicadores financeiros","Controle de peso e saúde para os funcionários da organização","Contabilidade que serve apenas para calcular impostos atrasados","Comparação de preços de fornecedores de matéria-prima"],c:0,e:"Avalia a empresa por perspectivas: financeira, clientes, processos e aprendizado."},
+            {q:"A 'Centralização' ocorre quando:",a:["A autoridade de decisão está concentrada no topo da hierarquia","As decisões são tomadas pelos funcionários de nível operacional","Não existe nenhum chefe e todos decidem tudo em conjunto","A empresa possui apenas uma sede física no centro da cidade"],c:0,e:"O poder decisório fica retido na alta cúpula organizacional."},
+            {q:"O conceito de 'Just-in-Time' (JIT) na produção visa:",a:["Produzir apenas o necessário, no momento certo, reduzindo estoques","Produzir o máximo possível para ter estoque para os próximos dez anos","Entregar os produtos sempre com atraso para valorizar a marca","Pagar os funcionários exatamente no momento em que terminam a tarefa"],c:0,e:"Filosofia japonesa focada na eliminação de desperdícios e eficiência de fluxo."},
+            {q:"O 'Organograma' é a representação gráfica de:",a:["Estrutura hierárquica e relações de autoridade da empresa","Fluxo de caixa mensal e faturamento bruto da organização","Localização geográfica de todas as filiais no mapa mundi","Evolução da temperatura das máquinas durante a produção"],c:0,e:"Mostra visualmente como a empresa está dividida e quem reporta a quem."},
+            {q:"A 'Departamentalização por Clientes' é recomendada quando:",a:["A empresa atende diferentes tipos de público com necessidades distintas","A organização possui apenas um produto e um único cliente fiel","Todos os clientes da empresa moram na mesma rua da fábrica","A empresa deseja que o cliente não consiga diferenciar os produtos"],c:0,e:"Foca em agrupar atividades para servir melhor grupos específicos (ex: Varejo x Atacado)."},
+            {q:"O 'Líder Autocrático' é aquele que:",a:["Centraliza o poder e toma decisões sozinho sem consultar a equipe","Dá total liberdade para os subordinados decidirem o que quiserem","Busca o consenso através de reuniões e votações democráticas","Não aparece na empresa e deixa que o sistema funcione sozinho"],c:0,e:"O foco é no comando e controle rigoroso por parte do líder."},
+            {q:"A 'Teoria das Relações Humanas' (Elton Mayo) revelou que:",a:["Fatores psicológicos e sociais influenciam a produtividade mais que o salário","O trabalhador só produz se for vigiado por câmeras de segurança","Máquinas mais rápidas são a única forma de aumentar o lucro","O isolamento social do trabalhador ajuda no foco e na concentração"],c:0,e:"A Experiência de Hawthorne mostrou a importância dos grupos informais e motivação."},
+            {q:"O 'Marketing Mix' (4Ps) é composto por:",a:["Produto, Preço, Praça e Promoção","Pessoas, Processos, Prédios e Patentes","Planejamento, Produção, Pesquisa e Pagamento","Poder, Política, Prática e Previsão"],c:0,e:"São as variáveis controláveis que a empresa usa para influenciar o mercado."},
+            {q:"O nível 'Operacional' da gestão foca em:",a:["Execução de tarefas diárias e rotinas de curto prazo","Definição da visão de futuro para os próximos dez anos","Negociações internacionais de fusão com outras empresas","Criação de novos logotipos e marcas para o marketing global"],c:0,e:"É a base da pirâmide administrativa, onde o trabalho é realizado diretamente."},
+            {q:"'Missão' organizacional define:",a:["A razão de ser da empresa, o seu propósito atual","Onde a empresa quer chegar daqui a 20 anos (futuro)","Os princípios éticos que a empresa nunca irá quebrar","A quantidade de lucro que os donos esperam ganhar por mês"],c:0,e:"A missão responde 'por que existimos?'; a visão responde 'o que queremos ser?'."},
+            {q:"A 'Visão' organizacional representa:",a:["Uma imagem do futuro desejado, onde a empresa quer chegar","Os problemas que a empresa enfrentou no ano passado","A lista de todos os funcionários que trabalham na sede","O endereço físico de onde a empresa está localizada"],c:0,e:"É a bússola estratégica de longo prazo para o crescimento."},
+            {q:"O 'Empowerment' (Empoderamento) na gestão significa:",a:["Delegar autoridade e poder de decisão para os níveis inferiores","Aumentar o salário apenas dos diretores da organização","Instalar softwares mais potentes nos computadores da recepção","Comprar ações de outras empresas para dominar o mercado"],c:0,e:"Dá autonomia para que os funcionários resolvam problemas na ponta."},
+            {q:"A 'Gestão da Qualidade Total' (TQM) foca em:",a:["Satisfação do cliente e melhoria contínua em todos os processos","Garantir que apenas o produto final seja testado antes da venda","Aumentar a velocidade da linha de montagem custe o que custar","Reduzir o número de funcionários para economizar recursos"],c:0,e:"Envolve todos os membros da organização na busca pela excelência."},
+            {q:"O 'Ciclo PDCA' é utilizado para:",a:["Melhoria contínua de processos (Plan, Do, Check, Act)","Pagar, Devolver, Comprar e Alugar equipamentos","Planejamento de Demissões, Contratações e Admissões","Produção de Dados para Controle de Auditoria"],c:0,e:"É uma ferramenta fundamental de gestão de qualidade e processos."},
+            {q:"Na 'Estrutura Divisional', a empresa se organiza por:",a:["Produtos, projetos, clientes ou localização geográfica","Apenas um grande departamento que cuida de tudo ao mesmo tempo","Pessoas que possuem o mesmo sobrenome ou família","Critérios aleatórios definidos pelo software de RH"],c:0,e:"Cria unidades autônomas dentro da própria empresa para gerir diversidade."},
+            {q:"O 'Gerente de Linha' é aquele que:",a:["Possui autoridade direta sobre subordinados na execução de tarefas","Trabalha apenas na manutenção das linhas telefônicas da empresa","É um consultor externo que não manda em ninguém na firma","Responsável apenas por desenhar as linhas dos gráficos de vendas"],c:0,e:"Possui autoridade de comando sobre o fluxo principal de trabalho."},
+            {q:"A 'Amplitude Administrativa' refere-se ao:",a:["Número de subordinados que um gestor consegue supervisionar","Tamanho físico em metros quadrados do escritório da gerência","Tempo que um diretor leva para chegar ao trabalho todos os dias","Valor total de vendas que um gerente consegue fechar por mês"],c:0,e:"Quanto maior a amplitude, mais pessoas o chefe comanda diretamente."},
+            {q:"O 'Fluxograma' serve para visualizar:",a:["A sequência de passos de um processo ou atividade","O ranking dos funcionários que mais faltaram no mês","A árvore genealógica dos fundadores da organização","A flutuação das ações da empresa na bolsa de valores"],c:0,e:"Ferramenta visual essencial para identificar gargalos e falhas em fluxos."},
+            {q:"A 'Liderança Democrática' prioriza:",a:["A participação da equipe na tomada de decisões e debates","A obediência cega às ordens do chefe sem questionamento","A ausência de qualquer orientação, deixando a equipe perdida","A escolha do líder através de um sorteio aleatório entre os estagiários"],c:0,e:"O líder atua como facilitador e valoriza o input dos colaboradores."},
+            {q:"O 'Passivo' no balanço financeiro representa:",a:["As obrigações e dívidas que a empresa possui com terceiros","Todo o dinheiro que a empresa tem disponível em caixa agora","Os bens físicos como prédios, máquinas e veículos","O lucro líquido que foi distribuído para os sócios"],c:0,e:"Ativo (bens/direitos) = Passivo (obrigações) + Patrimônio Líquido."},
+            {q:"A 'Logística' empresarial cuida de:",a:["Fluxo de materiais, informações e produtos desde a origem ao consumo","Criação de anúncios para televisão e redes sociais","Contratação de modelos para desfiles de moda da marca","Limpeza e manutenção das máquinas de ar-condicionado"],c:0,e:"Garante que o produto certo chegue ao lugar certo, no tempo certo."},
+            {q:"A 'Vantagem Competitiva' ocorre quando uma empresa:",a:["Possui atributos que a tornam superior aos seus concorrentes","Possui o maior número de funcionários contratados no país","Usa o mesmo logotipo que outra empresa famosa do exterior","Não possui nenhum concorrente em seu setor de atuação"],c:0,e:"Pode vir de custos baixos, diferenciação ou foco em nicho."},
+            {q:"O 'Turnover' é um indicador que mede a:",a:["Rotatividade de pessoal (entrada e saída de funcionários)","Quantidade de produtos que foram devolvidos por defeito","Velocidade com que a empresa gira o seu estoque por ano","Taxa de conversão de cliques em vendas no site da empresa"],c:0,e:"Turnover alto pode indicar problemas de clima ou gestão."},
+            {q:"A 'Teoria Z' (William Ouchi) foca no modelo de gestão:",a:["Japonês, baseado na confiança, sutileza e lealdade","Americano clássico, baseado no individualismo e bônus financeiro","Alemão, baseado na engenharia pesada e automação total","Russo, baseado na centralização estatal absoluta da produção"],c:0,e:"Propõe uma cultura de longo prazo e preocupação com o bem-estar total."},
+            {q:"O 'SFC' (Sistema de Follow-up) serve para:",a:["Acompanhar e cobrar a execução de tarefas pendentes","Criar novas senhas de acesso para o e-mail corporativo","Impedir que funcionários usem redes sociais no horário de almoço","Medir a pressão arterial dos diretores durante crises financeiras"],c:0,e:"É o processo de 'dar seguimento' para garantir que nada seja esquecido."},
+            {q:"A 'Matriz BCG' ajuda a empresa a analisar:",a:["Seu portfólio de produtos em relação ao crescimento e fatia de mercado","O nível de radiação emitido pelos monitores dos computadores","A quantidade de carbono que a fábrica lança na atmosfera","Se o café da copa é de boa qualidade para os funcionários"],c:0,e:"Divide produtos em Estrelas, Vacas Leitosas, Pontos de Interrogação e Abacaxis."},
+            {q:"O 'Job Rotation' (Rodízio de Cargos) visa:",a:["Aumentar o conhecimento multifuncional do colaborador e reduzir o tédio","Fazer com que as pessoas trabalhem girando fisicamente em suas cadeiras","Mudar o endereço da empresa a cada seis meses para confundir o fisco","Obrigar o funcionário a trabalhar em um setor que ele odeia"],c:0,e:"Aumenta a visão sistêmica e prepara o funcionário para novos desafios."},
+            {q:"A 'Inteligência de Mercado' (BI) busca:",a:["Coletar e analisar dados da concorrência e clientes para decidir melhor","Hackear o sistema financeiro de outros países para lucrar na bolsa","Substituir o cérebro humano por um chip de memória de computador","Convencer o cliente a comprar coisas que ele não precisa através de hipnose"],c:0,e:"Transforma dados em inteligência competitiva estratégica."}
+        ]
+    }
+};
+
+let materiaAtiva = "tecnologia";
+let perguntas = [];
+let respostas = [];
+
+function preparar() {
+    let base = JSON.parse(JSON.stringify(banco[materiaAtiva].questoes));
+    perguntas = base.map(p => ({v: p, s: Math.random()})).sort((a,b)=>a.s-b.s).map(o=>o.v);
+    perguntas = perguntas.map(p => {
+        let alts = p.a.map((texto, idx) => ({texto, c: idx === p.c, s: Math.random()})).sort((a,b)=>a.s-b.s);
+        return { 
+            q: p.q, 
+            a: alts.map(a=>a.texto), 
+            c: alts.findIndex(a=>a.c),
+            e: p.e 
+        };
+    });
+    respostas = new Array(perguntas.length).fill(null);
+}
+
+function stats() {
+    let resp = respostas.filter(r => r !== null).length;
+    let acertos = 0;
+    respostas.forEach((r, i) => { if(r === perguntas[i].c) acertos++; });
+    document.getElementById("status-txt").innerText = `Acertos: ${acertos} / Respondidas: ${resp} de ${perguntas.length}`;
+    document.getElementById("barra").style.width = ((resp/perguntas.length)*100) + "%";
+}
+
+function responder(perguntaIndex, alternativaIndex) {
+    if(respostas[perguntaIndex] !== null) return; 
+    respostas[perguntaIndex] = alternativaIndex;
+    stats();
+    render(); 
+}
+
+function render() {
+    const quiz = document.getElementById("quiz");
+    quiz.innerHTML = "";
+    
+    perguntas.forEach((p, i) => {
+        const jaRespondeu = respostas[i] !== null;
+        const div = document.createElement("div");
+        div.className = "question" + (jaRespondeu ? " answered" : "");
+        div.innerHTML = `<p><strong>${i+1}. ${p.q}</strong></p>`;
+        
+        p.a.forEach((alt, j) => {
+            const label = document.createElement("label");
+            if(jaRespondeu) {
+                if(j === p.c) label.classList.add("correct");
+                if(respostas[i] === j && j !== p.c) label.classList.add("wrong");
+                if(respostas[i] === j) div.classList.add(j === p.c ? "correct" : "wrong");
+            }
+            label.onclick = () => responder(i, j);
+            label.innerHTML = `<span>${alt}</span>`;
+            div.appendChild(label);
+        });
+
+        if(jaRespondeu) {
+            const expDiv = document.createElement("div");
+            expDiv.className = "explanation";
+            expDiv.innerHTML = `<strong>💡 Explicação:</strong> ${p.e}`;
+            div.appendChild(expDiv);
+        }
+
+        quiz.appendChild(div);
+    });
+}
+
+function sortear() { 
+    preparar(); 
+    document.getElementById("resultado").style.display = "none"; 
+    stats(); 
+    render(); 
+    window.scrollTo(0,0); 
+}
+
+function alternarMateria() { 
+    materiaAtiva = (materiaAtiva === "tecnologia") ? "fge" : "tecnologia"; 
+    document.getElementById("materia-txt").innerText = "Matéria: " + banco[materiaAtiva].nome; 
+    sortear(); 
+}
+
+function finalizar() {
+    let acertos = 0;
+    let total = perguntas.length;
+    respostas.forEach((r, i) => { if(r === perguntas[i].c) acertos++; });
+    const resDiv = document.getElementById("resultado");
+    resDiv.style.display = "block";
+    resDiv.innerHTML = `Simulado Concluído!<br>Pontuação: ${acertos} de ${total} (${((acertos/total)*100).toFixed(1)}%)`;
+    resDiv.style.background = (acertos/total >= 0.7) ? "#dcfce7" : "#fee2e2";
+    window.scrollTo({ top: document.body.scrollHeight, behavior: 'smooth' });
+}
+
+preparar();
+render();
+</script>
+</body>
+</html>
